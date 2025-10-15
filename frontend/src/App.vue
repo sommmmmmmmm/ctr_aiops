@@ -7,7 +7,7 @@
     <!-- 사이드바 -->
     <el-aside width="240px" class="sidebar">
         <div class="logo" @click="goToLanding">
-          <h2>SK Planet</h2>
+          <h2>SK AX</h2>
           <p class="logo-subtitle">AIOps</p>
         </div>
       <el-menu

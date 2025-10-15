@@ -5,10 +5,10 @@
       <div class="hero-content">
         <div class="hero-text" data-aos="fade-up">
           <h1 class="hero-title">
-            SK Planet <span class="highlight">AIOps</span>
+            SK AX <span class="highlight">AIOps</span>
           </h1>
           <p class="hero-subtitle">
-            SK AX가 제공하는 AI 기반 광고 최적화 플랫폼으로<br />
+            AI 기반 광고 최적화 플랫폼으로<br />
             사용자 행동을 분석하여 전략 인사이트를 실시간 제공합니다
           </p>
           <div class="company-badge">
@@ -45,22 +45,22 @@
       </div>
     </section>
 
-    <!-- Client Intro Section - SK Planet -->
+    <!-- Client Intro Section - SK AX -->
     <section class="client-intro-section">
       <div class="container">
         <div class="client-banner" data-aos="fade-up">
           <div class="client-badge">SERVICE FOR</div>
           <div class="client-logo">
-            <h1>SK Planet</h1>
+            <h1>SK AX</h1>
             <p class="client-tagline">AIOps</p>
           </div>
           <div class="client-description">
             <p>
-              <strong>SK Planet의 광고 사이트</strong>에서 발생하는 사용자 행동 데이터를 AI가 실시간으로 분석하여<br />
+              <strong>SK AX의 광고 사이트</strong>에서 발생하는 사용자 행동 데이터를 AI가 실시간으로 분석하여<br />
               CTR(클릭률) 예측 모델을 통해 마케팅 전략 인사이트를 제공합니다.
             </p>
             <p class="highlight-text">
-              SK AX가 제공하는 AI 기반 플랫폼으로<br />
+              AI 기반 플랫폼으로<br />
               <span class="gradient-text">데이터 기반 마케팅 전략과 실행 가능한 액션 플랜</span>을 실현합니다.
             </p>
           </div>
@@ -217,7 +217,7 @@
         <div class="feature-row">
           <div class="feature-content" data-aos="fade-right">
             <span class="feature-tag">고객사 대시보드</span>
-            <h3>SK Planet을 위한<br/>맞춤형 대시보드</h3>
+            <h3>SK AX를 위한<br/>맞춤형 대시보드</h3>
             <ul class="feature-list">
               <li><el-icon><Check /></el-icon> 비즈니스 중심 인사이트 & ROI 분석</li>
               <li><el-icon><Check /></el-icon> 마케팅 전략 추천 & 액션 플랜</li>
