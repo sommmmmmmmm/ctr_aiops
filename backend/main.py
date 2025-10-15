@@ -36,12 +36,13 @@ app = FastAPI(
 ALLOWED_ORIGINS = [
     "http://localhost:3000",  # 로컬 개발
     "https://*.vercel.app",   # Vercel Preview
-    "https://ctr-aiops.vercel.app",  # Vercel Production (실제 URL로 변경)
+    "https://ctr-aiops.vercel.app",  # Vercel Production
+    "https://ctr-aiops-front.vercel.app",  # 실제 프론트엔드 URL
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS if os.getenv("ENV") == "production" else ["*"],
+    allow_origins=["*"],  # 모든 origin 허용 (개발용)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
