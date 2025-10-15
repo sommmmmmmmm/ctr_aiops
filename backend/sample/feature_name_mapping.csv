@@ -1,0 +1,124 @@
+original_feature,description_kr
+clicked,클릭 여부
+seq,시퀀스 번호
+user_id,사용자 ID
+ad_id,광고 ID
+advertiser_id,광고주 ID
+campaign_id,캠페인 ID
+creative_id,크리에이티브 ID
+position_id,광고 위치 ID
+site_id,사이트 ID
+app_id,앱 ID
+device_type,디바이스 타입
+os,운영체제
+browser,브라우저
+province,지역(시/도)
+city,지역(시/군/구)
+age,나이
+gender,성별
+occupation,직업
+education,학력
+income,소득
+interests,관심사
+behavior_score,행동 점수
+click_history,클릭 이력
+purchase_history,구매 이력
+time_slot,시간대
+weekday,요일
+hour,시간
+month,월
+season,계절
+holiday,공휴일 여부
+weather,날씨
+temperature,기온
+humidity,습도
+ad_size,광고 크기
+ad_format,광고 형식
+ad_category,광고 카테고리
+ad_price,광고 가격
+ad_discount,광고 할인율
+ad_rating,광고 평점
+ad_review_count,광고 리뷰 수
+ad_click_count,광고 클릭 수
+ad_view_count,광고 노출 수
+ad_ctr,광고 CTR
+ad_cvr,광고 CVR
+ad_cpc,광고 CPC
+ad_cpm,광고 CPM
+ad_cpa,광고 CPA
+ad_bid,광고 입찰가
+ad_budget,광고 예산
+ad_spend,광고 소진액
+ad_roi,광고 ROI
+ad_lifetime,광고 수명
+ad_frequency,광고 빈도
+ad_recency,광고 최근성
+user_activity,사용자 활동도
+user_engagement,사용자 참여도
+user_loyalty,사용자 충성도
+user_value,사용자 가치
+user_risk,사용자 위험도
+user_segment,사용자 세그먼트
+user_preference,사용자 선호도
+user_behavior,사용자 행동 패턴
+user_demographic,사용자 인구통계
+user_psychographic,사용자 심리통계
+user_geographic,사용자 지리통계
+user_technographic,사용자 기술통계
+user_social,사용자 사회통계
+user_economic,사용자 경제통계
+user_cultural,사용자 문화통계
+user_environmental,사용자 환경통계
+user_temporal,사용자 시간통계
+user_contextual,사용자 상황통계
+user_emotional,사용자 감정통계
+user_cognitive,사용자 인지통계
+user_motivational,사용자 동기통계
+user_attitudinal,사용자 태도통계
+user_behavioral,사용자 행동통계
+user_relationship,사용자 관계통계
+user_network,사용자 네트워크통계
+user_influence,사용자 영향력통계
+user_authority,사용자 권위통계
+user_credibility,사용자 신뢰성통계
+user_reputation,사용자 평판통계
+user_trust,사용자 신뢰도통계
+user_satisfaction,사용자 만족도통계
+user_experience,사용자 경험통계
+user_journey,사용자 여정통계
+user_touchpoint,사용자 접점통계
+user_moment,사용자 순간통계
+user_occasion,사용자 상황통계
+user_scenario,사용자 시나리오통계
+user_goal,사용자 목표통계
+user_need,사용자 니즈통계
+user_pain,사용자 페인통계
+user_gain,사용자 게인통계
+user_job,사용자 잡통계
+user_outcome,사용자 결과통계
+user_impact,사용자 임팩트통계
+user_value_prop,사용자 가치제안통계
+user_benefit,사용자 혜택통계
+user_feature,사용자 피처통계
+user_function,사용자 기능통계
+user_advantage,사용자 장점통계
+user_benefit_type,사용자 혜택타입통계
+user_benefit_level,사용자 혜택레벨통계
+user_benefit_priority,사용자 혜택우선순위통계
+user_benefit_importance,사용자 혜택중요도통계
+user_benefit_satisfaction,사용자 혜택만족도통계
+user_benefit_expectation,사용자 혜택기대도통계
+user_benefit_perception,사용자 혜택인식통계
+user_benefit_evaluation,사용자 혜택평가통계
+user_benefit_decision,사용자 혜택결정통계
+user_benefit_action,사용자 혜택행동통계
+user_benefit_result,사용자 혜택결과통계
+user_benefit_impact,사용자 혜택임팩트통계
+user_benefit_value,사용자 혜택가치통계
+user_benefit_roi,사용자 혜택ROI통계
+user_benefit_cost,사용자 혜택비용통계
+user_benefit_risk,사용자 혜택위험통계
+user_benefit_opportunity,사용자 혜택기회통계
+user_benefit_threat,사용자 혜택위협통계
+user_benefit_strength,사용자 혜택강점통계
+user_benefit_weakness,사용자 혜택약점통계
