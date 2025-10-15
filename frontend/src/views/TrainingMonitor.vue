@@ -170,9 +170,11 @@ const simulateTraining = () => {
       clearInterval(interval)
       status.value = 'completed'
       addLog('학습 완료!')
-      // 완료 후 결과 페이지로 이동
+      
+      // 완료 후 결과 페이지로 이동 (강제 이동)
       setTimeout(() => {
-        router.push(`/report/${runId.value}`)
+        console.log('학습 완료, AI 보고서 페이지로 이동:', `/report/${runId.value}`)
+        window.location.href = `/report/${runId.value}`
       }, 2000)
     }
   }, 2000) // 2초마다 업데이트

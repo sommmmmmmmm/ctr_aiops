@@ -308,6 +308,49 @@ async def get_correlation(run_id: str):
         logger.error(f"Correlation analysis error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Correlation analysis failed: {str(e)}")
 
+@app.post("/api/report/generate-pdf/latest")
+async def generate_pdf_latest(options: Dict[str, Any]):
+    """
+    최신 학습 결과로 AI 생성 PDF 보고서
+    """
+    try:
+        # Get latest training run
+        runs = training_service.get_all_runs()
+        if not runs:
+            raise HTTPException(status_code=404, detail="No training runs found")
+        
+        # Get the latest run
+        latest_run = max(runs, key=lambda x: x.get("created_at", ""))
+        run_id = latest_run["run_id"]
+        
+        # Get training results
+        training_results = training_service.get_training_results(run_id)
+        if not training_results:
+            raise HTTPException(status_code=404, detail="Training run not found")
+        
+        # Get AI report
+        feature_importance = training_results.get("feature_importance", [])
+        ai_report = await ai_report_service.generate_report(
+            run_id, training_results, feature_importance
+        )
+        
+        # Generate PDF
+        pdf_path = pdf_service.generate_report_pdf(
+            run_id, ai_report, feature_importance
+        )
+        
+        return {
+            "pdf_url": f"/api/report/pdf/{run_id}",
+            "file_path": pdf_path,
+            "run_id": run_id
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"PDF generation error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"PDF generation failed: {str(e)}")
+
 @app.post("/api/report/generate-pdf/{run_id}")
 async def generate_pdf(run_id: str, options: Dict[str, Any]):
     """
