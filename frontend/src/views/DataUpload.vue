@@ -397,39 +397,69 @@ const validateData = async () => {
     duration: 0
   })
 
-  // Mock 모드로 강제 진행 (백엔드 문제 해결 전까지)
-  loading.close()
-  console.log('Mock 모드로 데이터 검증 진행')
-  
-  // Mock 파일 ID 설정
-  uploadedFileId.value = 'mock-file-id-123'
-  
-  // Mock 데이터 생성
-  previewColumns.value = ['gender', 'age_group', 'inventory_id', 'day_of_week', 'hour', 'seq', 'clicked']
-  previewData.value = Array.from({ length: 5 }, (_, i) => ({
-    gender: (i % 2 + 1).toFixed(1),
-    age_group: (i % 5 + 4).toFixed(1),
-    inventory_id: Math.floor(Math.random() * 100),
-    day_of_week: (i % 7 + 1),
-    hour: Math.floor(Math.random() * 24),
-    seq: '57,281,455,130,479,35',
-    clicked: i % 5 === 0 ? 1 : 0
-  }))
-  
-  validationResult.value.isValid = true
-  dataInfo.value = {
-    totalRows: 60000,
-    totalColumns: 119,
-    missingValues: 0,
-    missingPercentage: 0,
-    duplicateRows: 0,
-    clickedOne: 1150,
-    clickedZero: 58850,
-    ctr: 1.92
+  try {
+    // FormData 생성
+    const formData = new FormData()
+    formData.append('file', uploadedFile.value)
+
+    // 백엔드 API 호출 (검증)
+    const response = await api.uploadData(formData)
+    
+    // 파일 ID 저장 (중요!)
+    uploadedFileId.value = response.file_id
+    
+    // 검증 결과 및 데이터 정보 업데이트
+    validationResult.value = response.validation
+    dataInfo.value = response.info
+    previewData.value = response.preview.slice(0, 10)
+    previewColumns.value = response.columns.slice(0, 10)
+
+    loading.close()
+    
+    if (validationResult.value.isValid) {
+      ElMessage.success('데이터 검증 완료!')
+      currentStep.value = 1
+    } else {
+      ElMessage.warning('데이터에 문제가 있습니다. 확인 후 수정하세요.')
+      currentStep.value = 1
+    }
+  } catch (error) {
+    loading.close()
+    console.error('Validation error:', error)
+    
+    // Mock 데이터로 폴백 (백엔드 연결 실패 시)
+    ElMessage.warning('백엔드 연결 실패. Mock 데이터를 사용합니다.')
+    
+    // Mock 파일 ID 설정
+    uploadedFileId.value = 'mock-file-id-123'
+    
+    // Mock 데이터 생성
+    previewColumns.value = ['gender', 'age_group', 'inventory_id', 'day_of_week', 'hour', 'seq', 'clicked']
+    previewData.value = Array.from({ length: 5 }, (_, i) => ({
+      gender: (i % 2 + 1).toFixed(1),
+      age_group: (i % 5 + 4).toFixed(1),
+      inventory_id: Math.floor(Math.random() * 100),
+      day_of_week: (i % 7 + 1),
+      hour: Math.floor(Math.random() * 24),
+      seq: '57,281,455,130,479,35',
+      clicked: i % 5 === 0 ? 1 : 0
+    }))
+    
+    validationResult.value.isValid = true
+    dataInfo.value = {
+      totalRows: 60000,
+      totalColumns: 119,
+      missingValues: 0,
+      missingPercentage: 0,
+      duplicateRows: 0,
+      clickedOne: 1150,
+      clickedZero: 58850,
+      ctr: 1.92
+    }
+    
+    ElMessage.success('데이터 검증 완료! (Mock 모드)')
+    currentStep.value = 1
   }
-  
-  ElMessage.success('데이터 검증 완료! (데모 모드)')
-  currentStep.value = 1
 }
 
 const startTraining = async () => {
@@ -453,15 +483,26 @@ const startTraining = async () => {
 
     isTraining.value = true
 
-    // Mock 모드로 강제 진행 (백엔드 문제 해결 전까지)
-    console.log('Mock 모드로 학습 시작')
-    
-    // Mock 응답으로 진행
-    ElMessage.success('모델 학습이 시작되었습니다! (데모 모드)')
-    
-    setTimeout(() => {
-      router.push('/training/mock-run-id')
-    }, 1500)
+    // 학습 시작 API 호출 (실제 file_id 사용)
+    try {
+      const response = await api.startTraining(uploadedFileId.value, trainingConfig.value)
+      
+      ElMessage.success('모델 학습이 시작되었습니다!')
+      
+      // 학습 모니터링 페이지로 이동
+      setTimeout(() => {
+        router.push(`/training/${response.run_id}`)
+      }, 1500)
+    } catch (error) {
+      console.error('API 호출 실패, Mock 모드로 진행:', error)
+      
+      // Mock 응답으로 진행
+      ElMessage.success('모델 학습이 시작되었습니다! (Mock 모드)')
+      
+      setTimeout(() => {
+        router.push('/training/mock-run-id')
+      }, 1500)
+    }
 
   } catch (error) {
     if (error !== 'cancel') {
