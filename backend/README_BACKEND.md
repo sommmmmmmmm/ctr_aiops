@@ -28,20 +28,35 @@ Frontend가 완성되어 있으므로, **Backend API만 구현하시면 됩니�
 ## 🚀 Quick Start
 
 ### 1. 가상환경 생성 및 활성화
+
+#### macOS (Apple Silicon - M1/M2/M3)
 ```bash
-python -m venv venv
+# ARM64 네이티브 모드로 가상환경 생성
+arch -arm64 python3 -m venv venv
 
-# macOS/Linux
-source venv/bin/activate
+# 패키지 설치
+arch -arm64 ./venv/bin/pip install --upgrade pip
+arch -arm64 ./venv/bin/pip install -r requirements.txt
 
-# Windows
-venv\Scripts\activate
+# 서버 실행 (간편 스크립트)
+./start.sh
 ```
 
-### 2. 패키지 설치
+#### macOS (Intel) / Linux
 ```bash
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
+
+#### Windows
+```bash
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### 2. 패키지 설치 (이미 위에서 완료)
 
 ### 3. 환경 변수 설정
 `.env` 파일 생성:
