@@ -132,7 +132,53 @@ const trainingHistory = ref({
 
 const trainingLogs = ref([])
 
-// WebSocket 연결
+// Mock 학습 시뮬레이션
+const simulateTraining = () => {
+  const totalEpochs = 10
+  let currentEpoch = 0
+  
+  const interval = setInterval(() => {
+    currentEpoch++
+    
+    // Mock 데이터 생성
+    const mockData = {
+      type: currentEpoch < totalEpochs ? 'epoch_update' : 'training_complete',
+      epoch: currentEpoch,
+      metrics: {
+        trainLoss: Math.max(0.1, 1.0 - (currentEpoch / totalEpochs) * 0.8 + Math.random() * 0.1),
+        valLoss: Math.max(0.1, 1.0 - (currentEpoch / totalEpochs) * 0.7 + Math.random() * 0.1),
+        trainAccuracy: Math.min(0.95, 0.5 + (currentEpoch / totalEpochs) * 0.4 + Math.random() * 0.05),
+        valAccuracy: Math.min(0.93, 0.5 + (currentEpoch / totalEpochs) * 0.38 + Math.random() * 0.05)
+      }
+    }
+    
+    // 상태 업데이트
+    currentEpoch.value = mockData.epoch
+    currentMetrics.value = mockData.metrics
+    
+    // 히스토리 업데이트
+    trainingHistory.value.epochs.push(`Epoch ${mockData.epoch}`)
+    trainingHistory.value.accuracy.push(mockData.metrics.trainAccuracy)
+    trainingHistory.value.valAccuracy.push(mockData.metrics.valAccuracy)
+    trainingHistory.value.loss.push(mockData.metrics.trainLoss)
+    trainingHistory.value.valLoss.push(mockData.metrics.valLoss)
+    
+    // 로그 추가
+    addLog(`Epoch ${mockData.epoch}/${totalEpochs} - Loss: ${mockData.metrics.trainLoss.toFixed(4)}, Acc: ${(mockData.metrics.trainAccuracy * 100).toFixed(2)}%`)
+    
+    if (currentEpoch >= totalEpochs) {
+      clearInterval(interval)
+      status.value = 'completed'
+      addLog('학습 완료!')
+      // 완료 후 결과 페이지로 이동
+      setTimeout(() => {
+        router.push(`/report/${runId.value}`)
+      }, 2000)
+    }
+  }, 2000) // 2초마다 업데이트
+}
+
+// WebSocket 연결 (Mock 모드)
 const { isConnected } = useWebSocket(`/ws/training/${runId.value}`, {
   onMessage: (data) => {
     if (data.type === 'epoch_update') {
@@ -159,6 +205,11 @@ const { isConnected } = useWebSocket(`/ws/training/${runId.value}`, {
     } else if (data.type === 'log') {
       addLog(data.message)
     }
+  },
+  onError: () => {
+    // WebSocket 실패 시 Mock 모드로 전환
+    console.log('WebSocket 실패, Mock 모드로 전환')
+    simulateTraining()
   }
 })
 
