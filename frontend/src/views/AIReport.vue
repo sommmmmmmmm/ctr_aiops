@@ -60,7 +60,7 @@
         <el-row :gutter="20" style="margin-top: 20px">
           <el-col :span="8">
             <div class="summary-metric">
-              <div class="metric-icon">📈</div>
+              <div class="metric-icon">📊</div>
               <div class="metric-info">
                 <div class="metric-label">예상 ROI 증대</div>
                 <div class="metric-value">+{{ reportData.roiIncrease }}%</div>
@@ -69,7 +69,7 @@
           </el-col>
           <el-col :span="8">
             <div class="summary-metric">
-              <div class="metric-icon">🎯</div>
+              <div class="metric-icon">📊</div>
               <div class="metric-info">
                 <div class="metric-label">모델 정확도</div>
                 <div class="metric-value">{{ reportData.accuracy }}%</div>
@@ -105,7 +105,7 @@
       <el-col :span="8">
         <el-card>
           <template #header>
-            <span>⭐ 중요 피처 Top 5</span>
+            <span>중요 피처 Top 5</span>
           </template>
           <div class="top-features">
             <div
@@ -151,7 +151,7 @@
       <el-col :span="24">
         <el-card>
           <template #header>
-            <span>📉 저영향 피처 분석 & 개선 방안</span>
+            <span>저영향 피처 분석 & 개선 방안</span>
           </template>
           <el-table :data="lowImpactFeatures" style="width: 100%">
             <el-table-column prop="feature" label="피처명" width="200" />
@@ -185,7 +185,7 @@
       <el-col :span="24">
         <el-card>
           <template #header>
-            <span>🚀 액션 플랜 우선순위</span>
+            <span>액션 플랜 우선순위</span>
           </template>
           <el-timeline>
             <el-timeline-item
@@ -367,7 +367,7 @@ const actionPlan = ref([
 // AI 인사이트 데이터
 const aiInsights = ref([
   {
-    icon: '🎯',
+    icon: 'target',
     title: '20-30대 여성 타겟 집중',
     message: '해당 세그먼트의 클릭률이 평균 대비 45% 높으며, 전환율도 32% 우수합니다.'
   },

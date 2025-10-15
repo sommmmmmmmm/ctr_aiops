@@ -57,7 +57,7 @@ export const useNotificationStore = defineStore('notification', () => {
     // Accuracy < 0.7 경고
     if (accuracy < 0.7) {
       addNotification({
-        title: '⚠️ 성능 경고',
+        title: '성능 경고',
         message: `모델 정확도가 ${(accuracy * 100).toFixed(1)}%로 하락했습니다. 재학습을 권장합니다.`,
         type: 'warning',
         persistent: true,
@@ -73,7 +73,7 @@ export const useNotificationStore = defineStore('notification', () => {
     // F1 Score 급락 경고
     if (f1Score && f1Score < 0.6) {
       addNotification({
-        title: '⚠️ F1 Score 급락',
+        title: 'F1 Score 급락',
         message: `F1 Score가 ${f1Score.toFixed(2)}로 급락했습니다.`,
         type: 'warning',
         persistent: true,
@@ -85,7 +85,7 @@ export const useNotificationStore = defineStore('notification', () => {
     // 추론 지연 경고
     if (responseTime > 500) {
       addNotification({
-        title: '⏱️ 응답 지연',
+        title: '응답 지연',
         message: `추론 시간이 ${responseTime}ms로 증가했습니다. 성능 최적화가 필요합니다.`,
         type: 'warning',
         severity: 'medium',
@@ -97,7 +97,7 @@ export const useNotificationStore = defineStore('notification', () => {
   // 학습 완료 알림
   const addTrainingCompleteNotification = (runId, metrics) => {
     addNotification({
-      title: '✅ 학습 완료',
+      title: '학습 완료',
       message: `새로운 모델 학습이 완료되었습니다. Accuracy: ${(metrics.accuracy * 100).toFixed(1)}%`,
       type: 'success',
       category: 'training',
@@ -108,7 +108,7 @@ export const useNotificationStore = defineStore('notification', () => {
   // 학습 실패 알림
   const addTrainingFailedNotification = (runId, error) => {
     addNotification({
-      title: '❌ 학습 실패',
+      title: '학습 실패',
       message: `모델 학습 중 오류가 발생했습니다: ${error}`,
       type: 'error',
       persistent: true,
@@ -120,7 +120,7 @@ export const useNotificationStore = defineStore('notification', () => {
   // 데이터 drift 감지 알림
   const addDataDriftAlert = (driftMetrics) => {
     addNotification({
-      title: '🔄 데이터 Drift 감지',
+      title: '데이터 Drift 감지',
       message: `입력 데이터 분포에 변화가 감지되었습니다. 모델 재학습을 고려하세요.`,
       type: 'warning',
       severity: 'medium',

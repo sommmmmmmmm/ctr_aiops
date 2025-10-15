@@ -151,11 +151,11 @@ const { isConnected } = useWebSocket(`/ws/training/${runId.value}`, {
     } else if (data.type === 'training_complete') {
       status.value = 'completed'
       notificationStore.addTrainingCompleteNotification(runId.value, data.metrics)
-      addLog('✅ 학습 완료!')
+      addLog('학습 완료!')
     } else if (data.type === 'training_failed') {
       status.value = 'failed'
       notificationStore.addTrainingFailedNotification(runId.value, data.error)
-      addLog(`❌ 학습 실패: ${data.error}`)
+      addLog(`학습 실패: ${data.error}`)
     } else if (data.type === 'log') {
       addLog(data.message)
     }
@@ -236,12 +236,12 @@ const simulateTraining = () => {
 
 onMounted(() => {
   status.value = 'training'
-  addLog('🚀 학습을 시작합니다...')
+  addLog('학습을 시작합니다...')
   
   // WebSocket이 연결되지 않으면 Mock 시뮬레이션
   setTimeout(() => {
     if (!isConnected.value) {
-      addLog('⚠️ 실시간 연결 실패. 시뮬레이션 모드로 전환합니다.')
+      addLog('실시간 연결 실패. 시뮬레이션 모드로 전환합니다.')
       simulateTraining()
     }
   }, 2000)

@@ -48,14 +48,30 @@ const chartData = computed(() => {
 
   if (props.type === 'accuracy' || props.type === 'all') {
     datasets.push({
-      label: 'Train Accuracy',
+      label: 'Model Accuracy',
       data: accuracy,
       borderColor: '#3498db',
       backgroundColor: 'rgba(52, 152, 219, 0.1)',
       fill: true,
       tension: 0.4
     })
-    if (valAccuracy) {
+    
+    // 0.7 기준선 추가
+    if (props.type === 'accuracy') {
+      datasets.push({
+        label: '0.7 (기준)',
+        data: new Array(accuracy.length).fill(0.7),
+        borderColor: '#e74c3c',
+        backgroundColor: 'transparent',
+        borderWidth: 3,
+        borderDash: [5, 5],
+        fill: false,
+        pointRadius: 0,
+        pointHoverRadius: 0
+      })
+    }
+    
+    if (valAccuracy && props.type === 'all') {
       datasets.push({
         label: 'Val Accuracy',
         data: valAccuracy,
@@ -110,7 +126,7 @@ const chartData = computed(() => {
   }
 
   return {
-    labels: epochs || Array.from({ length: accuracy?.length || 0 }, (_, i) => `Epoch ${i + 1}`),
+    labels: epochs || Array.from({ length: accuracy?.length || 0 }, (_, i) => `Month ${i + 1}`),
     datasets
   }
 })
@@ -156,14 +172,14 @@ const chartOptions = computed(() => ({
       display: true,
       title: {
         display: true,
-        text: 'Epoch'
+        text: 'Month'
       }
     },
     y: {
       display: true,
       title: {
         display: true,
-        text: props.type === 'loss' ? 'Loss' : 'Score'
+        text: props.type === 'accuracy' ? 'Accuracy' : (props.type === 'loss' ? 'Loss' : 'Score')
       },
       beginAtZero: props.type === 'loss',
       max: props.type !== 'loss' ? 1 : undefined

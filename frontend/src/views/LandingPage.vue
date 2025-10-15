@@ -264,13 +264,13 @@
               </div>
               <div class="report-content">
                 <div class="insight-item">
-                  💡 "20-30대 여성 고객의 클릭률이 오후 8-10시에 가장 높습니다"
+                  "20-30대 여성 고객의 클릭률이 오후 8-10시에 가장 높습니다"
                 </div>
                 <div class="insight-item">
-                  📊 "모바일 광고 위치 상단이 CTR 23% 증가 효과"
+                  "모바일 광고 위치 상단이 CTR 23% 증가 효과"
                 </div>
                 <div class="insight-item">
-                  🎯 "추천: 타겟 세그먼트별 차별화된 광고 소재 활용"
+                  "추천: 타겟 세그먼트별 차별화된 광고 소재 활용"
                 </div>
               </div>
             </div>

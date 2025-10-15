@@ -67,7 +67,7 @@
       <div v-show="currentStep === 1" class="validation-section">
         <el-alert
           :type="validationResult.isValid ? 'success' : 'warning'"
-          :title="validationResult.isValid ? '✅ 데이터 검증 완료' : '⚠️ 데이터 검증 결과'"
+          :title="validationResult.isValid ? '데이터 검증 완료' : '데이터 검증 결과'"
           :closable="false"
           style="margin-bottom: 20px"
         >

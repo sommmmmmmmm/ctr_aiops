@@ -60,7 +60,7 @@
         <el-card class="insights-card">
           <template #header>
             <div class="card-header">
-              <span>💡 AI 핵심 인사이트</span>
+              <span>AI 핵심 인사이트</span>
               <el-tag type="success">실시간 분석</el-tag>
             </div>
           </template>
@@ -101,7 +101,7 @@
       <el-col :span="8">
         <el-card>
           <template #header>
-            <span>🎯 퀵 액션</span>
+            <span>퀵 액션</span>
           </template>
           <div class="quick-actions">
             <el-button
@@ -137,7 +137,7 @@
 
         <el-card style="margin-top: 20px">
           <template #header>
-            <span>📊 성과 요약</span>
+            <span>성과 요약</span>
           </template>
           <el-timeline>
             <el-timeline-item
@@ -243,7 +243,7 @@
         <el-card>
           <template #header>
             <div class="card-header">
-              <span>🚀 AI 추천 마케팅 전략</span>
+              <span>AI 추천 마케팅 전략</span>
               <el-button type="text" @click="refreshRecommendations">
                 <el-icon><Refresh /></el-icon>
                 새로고침

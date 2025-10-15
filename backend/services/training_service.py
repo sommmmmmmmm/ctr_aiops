@@ -13,6 +13,9 @@ import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import logging
 
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models.lstm_mlp_model import CTRPredictor
 
 logger = logging.getLogger(__name__)
@@ -57,7 +60,7 @@ class TrainingService:
             config = job["config"]
             
             # Load data
-            from services.data_service import DataService
+            from .data_service import DataService
             data_service = DataService()
             df = data_service.load_data(file_id, sample_size=config.get("sample_size", 10000))
             

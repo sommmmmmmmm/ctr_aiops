@@ -1,5 +1,26 @@
 <template>
   <div class="si-dashboard">
+    <!-- 성능 드리프트 알림 -->
+    <el-alert
+      v-if="performanceAlert.show"
+      :title="performanceAlert.message"
+      :type="performanceAlert.severity === 'critical' ? 'error' : 'warning'"
+      :closable="false"
+      show-icon
+      class="performance-alert"
+    >
+      <div class="alert-content">
+        <p>{{ performanceAlert.message }}</p>
+        <p class="alert-detail">현재 정확도: {{ currentMetrics.accuracy }}% | 기준: 70% | 발생 시점: {{ performanceAlert.month }}</p>
+        <div class="alert-actions">
+          <el-button type="primary" size="small" @click="triggerRetraining">
+            <el-icon><Refresh /></el-icon>
+            재학습 시작
+          </el-button>
+        </div>
+      </div>
+    </el-alert>
+
     <!-- 헤더 통계 카드 -->
     <el-row :gutter="20" class="stats-row">
       <el-col :span="6">
@@ -276,33 +297,41 @@ const notificationStore = useNotificationStore()
 // State
 const performanceChartType = ref('accuracy')
 const currentMetrics = ref({
-  accuracy: 87.5,
-  precision: 0.851,
-  recall: 0.843,
-  f1Score: 0.847,
-  responseTime: 85
+  accuracy: 65.2, // 0.7 기준선 아래로 설정하여 재학습 필요 상황 표현
+  precision: 0.751,
+  recall: 0.743,
+  f1Score: 0.747,
+  responseTime: 145
 })
 
-const accuracyChange = ref(2.3)
-const avgResponseTime = ref(92)
+const accuracyChange = ref(-4.8) // 음수로 변경하여 성능 하락 표현
+const avgResponseTime = ref(120)
 const uptime = ref('15d 7h 23m')
 
+// 성능 드리프트 알림 상태
+const performanceAlert = ref({
+  show: true, // 정확도가 0.7 이하이므로 알림 표시
+  message: '모델 정확도가 0.7 기준선 아래로 떨어졌습니다. 재학습이 필요합니다.',
+  severity: 'critical',
+  month: 'Month 12'
+})
+
 const systemHealth = ref({
-  status: '정상',
-  cpuUsage: 45,
-  memoryUsage: 62,
-  apiSuccessRate: 99.2,
-  errorRate: 0.8
+  status: '주의',
+  cpuUsage: 78,
+  memoryUsage: 84,
+  apiSuccessRate: 94.2,
+  errorRate: 5.8
 })
 
 const performanceData = ref({
-  epochs: Array.from({ length: 10 }, (_, i) => `Epoch ${i + 1}`),
-  accuracy: [0.72, 0.78, 0.81, 0.84, 0.86, 0.87, 0.875, 0.878, 0.88, 0.875],
-  valAccuracy: [0.70, 0.76, 0.79, 0.82, 0.84, 0.85, 0.852, 0.855, 0.857, 0.853],
-  loss: [0.58, 0.45, 0.38, 0.32, 0.28, 0.25, 0.23, 0.22, 0.21, 0.22],
-  valLoss: [0.62, 0.48, 0.41, 0.35, 0.31, 0.28, 0.26, 0.25, 0.24, 0.25],
-  f1Score: [0.70, 0.75, 0.78, 0.81, 0.83, 0.84, 0.847, 0.850, 0.852, 0.847],
-  valF1Score: [0.68, 0.73, 0.76, 0.79, 0.81, 0.82, 0.825, 0.828, 0.830, 0.825]
+  months: Array.from({ length: 12 }, (_, i) => `Month ${i + 1}`),
+  accuracy: [0.88, 0.87, 0.85, 0.83, 0.81, 0.78, 0.75, 0.72, 0.69, 0.66, 0.63, 0.65], // 성능 드리프트 패턴
+  valAccuracy: [0.86, 0.84, 0.82, 0.79, 0.76, 0.73, 0.70, 0.67, 0.64, 0.61, 0.58, 0.60],
+  loss: [0.18, 0.22, 0.28, 0.35, 0.42, 0.48, 0.55, 0.62, 0.68, 0.75, 0.82, 0.79], // 성능 하락에 따른 loss 증가
+  valLoss: [0.20, 0.25, 0.32, 0.40, 0.48, 0.56, 0.64, 0.72, 0.80, 0.88, 0.96, 0.93],
+  f1Score: [0.87, 0.85, 0.82, 0.79, 0.76, 0.72, 0.68, 0.64, 0.60, 0.56, 0.52, 0.55], // F1 점수도 하락
+  valF1Score: [0.85, 0.82, 0.79, 0.75, 0.71, 0.67, 0.63, 0.59, 0.55, 0.51, 0.47, 0.50]
 })
 
 const latestRun = ref({
@@ -433,6 +462,21 @@ const refreshLogs = () => {
   console.log('Refreshing logs...')
 }
 
+const triggerRetraining = () => {
+  // 재학습 트리거
+  console.log('Triggering retraining due to performance drift...')
+  notificationStore.addPerformanceDriftNotification(
+    currentMetrics.value.accuracy,
+    performanceAlert.value.month
+  )
+  
+  // 알림 숨기기 (재학습 시작됨)
+  performanceAlert.value.show = false
+  
+  // 재학습 페이지로 이동
+  router.push('/training')
+}
+
 onMounted(() => {
   console.log('SI Dashboard mounted')
 })
@@ -441,6 +485,26 @@ onMounted(() => {
 <style scoped>
 .si-dashboard {
   padding: 0;
+}
+
+.performance-alert {
+  margin-bottom: 20px;
+}
+
+.alert-content {
+  margin-bottom: 10px;
+}
+
+.alert-detail {
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px;
+}
+
+.alert-actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
 }
 
 .stats-row {

@@ -50,7 +50,7 @@ app.add_middleware(
 # Initialize services
 data_service = DataService(
     upload_dir="uploaded_files",
-    feature_mapping_path="../sample/feature_name_mapping.csv"
+    feature_mapping_path="sample/feature_name_mapping.csv"
 )
 training_service = TrainingService()
 ai_report_service = AIReportService(
