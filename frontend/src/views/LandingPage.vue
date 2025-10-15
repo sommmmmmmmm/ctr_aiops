@@ -654,7 +654,7 @@ section {
   margin: 0 auto;
 }
 
-/* Client Intro Section - SK Planet */
+/* Client Intro Section - SK AX */
 .client-intro-section {
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   padding: 100px 20px;
