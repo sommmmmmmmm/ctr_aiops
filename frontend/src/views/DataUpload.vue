@@ -310,6 +310,7 @@ const router = useRouter()
 const currentStep = ref(0)
 const fileList = ref([])
 const uploadedFile = ref(null)
+const uploadedFileId = ref(null)  // 업로드된 파일의 ID 저장
 const isTraining = ref(false)
 
 const validationResult = ref({
@@ -404,6 +405,9 @@ const validateData = async () => {
     // 백엔드 API 호출 (검증)
     const response = await api.uploadData(formData)
     
+    // 파일 ID 저장 (중요!)
+    uploadedFileId.value = response.file_id
+    
     // 검증 결과 및 데이터 정보 업데이트
     validationResult.value = response.validation
     dataInfo.value = response.info
@@ -445,6 +449,12 @@ const validateData = async () => {
 
 const startTraining = async () => {
   try {
+    // 파일 ID 확인
+    if (!uploadedFileId.value) {
+      ElMessage.error('먼저 파일을 업로드하고 검증을 완료해주세요.')
+      return
+    }
+
     await ElMessageBox.confirm(
       '모델 학습을 시작하시겠습니까? 완료까지 약 20-30분 소요됩니다.',
       '학습 시작 확인',
@@ -457,8 +467,8 @@ const startTraining = async () => {
 
     isTraining.value = true
 
-    // 학습 시작 API 호출
-    const response = await api.startTraining('file-id-123', trainingConfig.value)
+    // 학습 시작 API 호출 (실제 file_id 사용)
+    const response = await api.startTraining(uploadedFileId.value, trainingConfig.value)
     
     ElMessage.success('모델 학습이 시작되었습니다!')
     
