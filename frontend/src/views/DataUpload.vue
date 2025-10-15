@@ -449,10 +449,11 @@ const validateData = async () => {
 
 const startTraining = async () => {
   try {
-    // 파일 ID 확인
+    // 파일 ID 확인 (임시로 Mock 데이터 사용)
     if (!uploadedFileId.value) {
-      ElMessage.error('먼저 파일을 업로드하고 검증을 완료해주세요.')
-      return
+      // Mock 파일 ID 사용
+      uploadedFileId.value = 'mock-file-id-123'
+      ElMessage.info('Mock 데이터로 학습을 시작합니다.')
     }
 
     await ElMessageBox.confirm(
