@@ -3,7 +3,7 @@ import LandingPage from '../views/LandingPage.vue'
 import SIDashboard from '../views/SIDashboard.vue'
 import ClientDashboard from '../views/ClientDashboard.vue'
 import DataUpload from '../views/DataUpload.vue'
-import TrainingMonitor from '../views/TrainingMonitorNew.vue'
+import TrainingMonitor from '../views/TrainingMonitor.vue'
 import AIReport from '../views/AIReport.vue'
 import APITester from '../views/APITester.vue'
 
