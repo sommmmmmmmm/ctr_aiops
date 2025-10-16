@@ -4,3 +4,6 @@
 cd "$(dirname "$0")"
 arch -arm64 ./venv/bin/python3 main.py
 
+
+
+
