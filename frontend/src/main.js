@@ -5,6 +5,7 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import router from './router'
 import App from './App.vue'
+import './style.css'
 
 // 모던한 색상 체계를 전역 CSS 변수로 설정
 const style = document.createElement('style')
