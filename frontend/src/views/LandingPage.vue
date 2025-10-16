@@ -346,7 +346,7 @@
             <el-button type="primary" size="large" @click="startDemo">
               무료 데모 신청
             </el-button>
-            <el-button size="large" plain @click="contactUs">
+            <el-button size="large" @click="contactUs" class="cta-secondary-btn">
               문의하기
             </el-button>
           </div>
@@ -1079,6 +1079,20 @@ section {
   display: flex;
   justify-content: center;
   gap: 16px;
+}
+
+.cta-secondary-btn {
+  background: transparent !important;
+  border: 2px solid white !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+.cta-secondary-btn:hover {
+  background: white !important;
+  color: #2c3e50 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
 }
 
 /* Footer */
