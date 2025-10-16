@@ -62,35 +62,50 @@
             </el-col>
           </el-row>
 
-          <!-- 학습 그래프 -->
-          <div style="margin-top: 30px">
-            <PerformanceChart
-              v-if="trainingHistory.accuracy.length > 0"
-              :data="trainingHistory"
-              type="accuracy"
-            />
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+          <!-- 차트 영역 -->
+          <el-row :gutter="20" style="margin-top: 30px">
+            <el-col :span="12">
+              <el-card>
+                <template #header>
+                  <span>Loss 추이</span>
+                </template>
+                <PerformanceChart
+                  :data="trainingHistory"
+                  type="loss"
+                  height="300"
+                />
+              </el-card>
+            </el-col>
+            <el-col :span="12">
+              <el-card>
+                <template #header>
+                  <span>Accuracy 추이</span>
+                </template>
+                <PerformanceChart
+                  :data="trainingHistory"
+                  type="accuracy"
+                  height="300"
+                />
+              </el-card>
+            </el-col>
+          </el-row>
 
-    <!-- 학습 로그 -->
-    <el-row :gutter="20" style="margin-top: 20px">
-      <el-col :span="24">
-        <el-card>
-          <template #header>
-            <span>📝 학습 로그</span>
-          </template>
-          <div class="log-console">
-            <div
-              v-for="(log, index) in trainingLogs"
-              :key="index"
-              class="log-line"
-            >
-              <span class="log-timestamp">{{ log.timestamp }}</span>
-              <span class="log-message">{{ log.message }}</span>
+          <!-- 로그 영역 -->
+          <el-card style="margin-top: 30px">
+            <template #header>
+              <span>학습 로그</span>
+            </template>
+            <div class="log-container">
+              <div
+                v-for="(log, index) in trainingLogs"
+                :key="index"
+                class="log-item"
+              >
+                <span class="log-time">{{ log.timestamp }}</span>
+                <span class="log-message">{{ log.message }}</span>
+              </div>
             </div>
-          </div>
+          </el-card>
         </el-card>
       </el-col>
     </el-row>
@@ -99,22 +114,19 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useWebSocket } from '@/composables/useWebSocket'
-import { useNotificationStore } from '@/stores/modules/notification'
-import PerformanceChart from '@/components/charts/PerformanceChart.vue'
 import { CircleCheck, CircleClose } from '@element-plus/icons-vue'
+import PerformanceChart from '@/components/charts/PerformanceChart.vue'
 
 const route = useRoute()
-const notificationStore = useNotificationStore()
+const router = useRouter()
+const runId = ref(route.params.runId || 'demo-run')
 
-const runId = computed(() => route.params.runId || 'mock-run-id')
-
-// State
+// 상태 관리
+const status = ref('pending') // pending, training, completed, failed
 const currentEpoch = ref(0)
 const totalEpochs = ref(10)
-const status = ref('training') // 'pending', 'training', 'completed', 'failed'
-
 const currentMetrics = ref({
   trainLoss: 0,
   valLoss: 0,
@@ -132,7 +144,6 @@ const trainingHistory = ref({
 
 const trainingLogs = ref([])
 
-
 // WebSocket 연결 (Mock 모드)
 const { isConnected } = useWebSocket(`/ws/training/${runId.value}`, {
   onMessage: (data) => {
@@ -147,16 +158,15 @@ const { isConnected } = useWebSocket(`/ws/training/${runId.value}`, {
       trainingHistory.value.loss.push(data.metrics.trainLoss)
       trainingHistory.value.valLoss.push(data.metrics.valLoss)
       
-      // 로그 추가
       addLog(`Epoch ${data.epoch}/${totalEpochs.value} - Loss: ${data.metrics.trainLoss.toFixed(4)}, Acc: ${(data.metrics.trainAccuracy * 100).toFixed(2)}%`)
     } else if (data.type === 'training_complete') {
       status.value = 'completed'
-      notificationStore.addTrainingCompleteNotification(runId.value, data.metrics)
-      addLog('학습 완료!')
-    } else if (data.type === 'training_failed') {
-      status.value = 'failed'
-      notificationStore.addTrainingFailedNotification(runId.value, data.error)
-      addLog(`학습 실패: ${data.error}`)
+      addLog('학습이 완료되었습니다!')
+      
+      // 완료 후 결과 페이지로 이동
+      setTimeout(() => {
+        router.push('/dashboard/si')
+      }, 2000)
     } else if (data.type === 'log') {
       addLog(data.message)
     }
@@ -164,7 +174,7 @@ const { isConnected } = useWebSocket(`/ws/training/${runId.value}`, {
   onError: () => {
     // WebSocket 실패 시 Mock 모드로 전환
     console.log('WebSocket 실패, Mock 모드로 전환')
-    simulateTraining()
+    startMockTraining()
   }
 })
 
@@ -211,12 +221,18 @@ const addLog = (message) => {
 }
 
 // Mock 데이터 시뮬레이션 (백엔드 미연결 시)
-const simulateTraining = () => {
+const startMockTraining = () => {
   let epoch = 0
   const interval = setInterval(() => {
     if (epoch >= totalEpochs.value) {
       clearInterval(interval)
       status.value = 'completed'
+      addLog('학습이 완료되었습니다!')
+      
+      // 완료 후 결과 페이지로 이동
+      setTimeout(() => {
+        router.push('/dashboard/si')
+      }, 2000)
       return
     }
     
@@ -248,7 +264,7 @@ onMounted(() => {
   setTimeout(() => {
     if (!isConnected.value) {
       addLog('실시간 연결 실패. 시뮬레이션 모드로 전환합니다.')
-      simulateTraining()
+      startMockTraining()
     }
   }, 2000)
 })
@@ -272,71 +288,76 @@ onMounted(() => {
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #909399;
 }
 
-.connection-status .connected {
+.connection-status .el-icon {
+  font-size: 16px;
+  color: #f56c6c;
+}
+
+.connection-status .el-icon.connected {
   color: #67c23a;
 }
 
 .progress-section {
-  padding: 20px;
-  background: #f8f9fa;
-  border-radius: 8px;
+  margin: 20px 0;
 }
 
 .progress-info {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #2c3e50;
+  margin-bottom: 10px;
+  font-weight: 500;
 }
 
 .metric-box {
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 12px;
   text-align: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
 }
 
 .metric-label {
   font-size: 14px;
+  color: #6c757d;
   margin-bottom: 8px;
-  opacity: 0.9;
 }
 
 .metric-value {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
+  color: #495057;
 }
 
-.log-console {
-  max-height: 400px;
+.log-container {
+  max-height: 300px;
   overflow-y: auto;
-  background: #1e1e1e;
-  color: #d4d4d4;
-  padding: 16px;
-  border-radius: 8px;
-  font-family: 'Monaco', 'Courier New', monospace;
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.log-item {
+  display: flex;
+  gap: 12px;
+  padding: 4px 0;
+  border-bottom: 1px solid #e9ecef;
+  font-family: 'Courier New', monospace;
   font-size: 13px;
 }
 
-.log-line {
-  padding: 4px 0;
-  display: flex;
-  gap: 12px;
+.log-item:last-child {
+  border-bottom: none;
 }
 
-.log-timestamp {
-  color: #858585;
+.log-time {
+  color: #6c757d;
   min-width: 80px;
 }
 
 .log-message {
-  color: #d4d4d4;
+  color: #495057;
+  flex: 1;
 }
 </style>
-
