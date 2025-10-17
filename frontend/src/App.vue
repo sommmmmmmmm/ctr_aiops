@@ -18,7 +18,7 @@
       >
         <el-menu-item index="/dashboard/si">
           <el-icon><Setting /></el-icon>
-          <span>SI 대시보드</span>
+          <span>개발자 대시보드</span>
         </el-menu-item>
         <el-menu-item index="/dashboard/client">
           <el-icon><User /></el-icon>

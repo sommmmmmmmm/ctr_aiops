@@ -18,7 +18,7 @@ const routes = [
     path: '/dashboard/si',
     name: 'SIDashboard',
     component: SIDashboard,
-    meta: { title: 'SI 대시보드', role: 'si' }
+    meta: { title: '개발자 대시보드', role: 'developer' }
   },
   {
     path: '/dashboard/client',
