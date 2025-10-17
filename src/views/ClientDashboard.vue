@@ -431,7 +431,7 @@ const marketingTerms = ref([
   { term: 'CTR', korean: '클릭률', description: '광고 노출 대비 클릭 비율' },
   { term: 'CVR', korean: '전환율', description: '클릭 대비 구매/가입 등 목표 행동 비율' },
   { term: '콘텐츠 카테고리', korean: '콘텐츠 유형', description: '광고가 노출된 콘텐츠의 분류 (라이프스타일, 테크 등)' },
-  { term: '스크롤 깊이', korean: '페이지 탐색도', description: '사용자가 페이지를 얼마나 깊이 탐색했는지 비율' },
+  { term: '스크롤 깊이', korean: '스크롤 깊이', description: '사용자가 페이지를 얼마나 깊이 스크롤했는지 비율' },
   { term: '7일 노출', korean: '노출 빈도', description: '같은 사용자에게 7일간 광고가 노출된 횟수' },
   { term: '상호작용 효과', korean: '조합 효과', description: '여러 피처가 함께 작용할 때의 시너지 효과' },
   { term: '코호트 리텐션', korean: '재방문율', description: '특정 기간에 유입된 고객의 재방문 비율' }
@@ -440,7 +440,7 @@ const marketingTerms = ref([
 // 고객 세그먼트 - 마케팅 KPI 기반 세분화 분석
 const customerSegments = ref([
   {
-    name: '라이프스타일 + 깊은 탐색',
+    name: '라이프스타일 + 높은 스크롤 깊이',
     performance: 'success',
     label: '최우수',
     roas: 6.8,
@@ -464,7 +464,7 @@ const customerSegments = ref([
     correlation: 0.72
   },
   {
-    name: '테크 + 중간 탐색',
+    name: '테크 + 중간 스크롤 깊이',
     performance: 'warning',
     label: '보통',
     roas: 4.1,
@@ -476,7 +476,7 @@ const customerSegments = ref([
     correlation: 0.65
   },
   {
-    name: '일반 + 낮은 탐색',
+    name: '일반 + 낮은 스크롤 깊이',
     performance: 'info',
     label: '개선 필요',
     roas: 2.8,

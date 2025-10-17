@@ -262,7 +262,7 @@ const reportData = ref({
 
 const featureImportance = ref([
   { feature: '콘텐츠유형', importance: 0.456, pValue: 0.0001, ci: [0.42, 0.49] },
-  { feature: '페이지탐색도', importance: 0.389, pValue: 0.0002, ci: [0.35, 0.43] },
+  { feature: '스크롤깊이', importance: 0.389, pValue: 0.0002, ci: [0.35, 0.43] },
   { feature: '노출빈도', importance: 0.324, pValue: 0.0003, ci: [0.29, 0.36] },
   { feature: '조합효과', importance: 0.287, pValue: 0.0005, ci: [0.25, 0.32] },
   { feature: '재방문율', importance: 0.251, pValue: 0.0008, ci: [0.22, 0.28] },
@@ -282,8 +282,8 @@ const topFeatures = ref([
     color: '#f56c6c'
   },
   {
-    name: '페이지 탐색도',
-    description: '깊은 탐색(80%+)에서 CTR 7.3%로 평균 대비 340% 높음',
+    name: '스크롤 깊이',
+    description: '높은 스크롤 깊이(80%+)에서 CTR 7.3%로 평균 대비 340% 높음',
     importance: 0.389,
     pValue: 0.0002,
     color: '#e6a23c'
@@ -297,7 +297,7 @@ const topFeatures = ref([
   },
   {
     name: '조합 효과',
-    description: '콘텐츠 × 탐색도 조합이 ROAS를 62% 향상',
+    description: '콘텐츠 × 스크롤 깊이 조합이 ROAS를 62% 향상',
     importance: 0.287,
     pValue: 0.0005,
     color: '#67c23a'
@@ -312,7 +312,7 @@ const topFeatures = ref([
 ])
 
 const correlationData = ref({
-  features: ['콘텐츠유형', '페이지탐색도', '노출빈도', '조합효과', '재방문율'],
+  features: ['콘텐츠유형', '스크롤깊이', '노출빈도', '조합효과', '재방문율'],
   matrix: [
     [1.0, 0.78, 0.45, 0.62, 0.35],
     [0.78, 1.0, 0.52, 0.68, 0.28],
@@ -348,7 +348,7 @@ const lowImpactFeatures = ref([
 
 const actionPlan = ref([
   {
-    title: 'ROAS 최적화 - 라이프스타일 × 깊은 탐색 조합 집중',
+    title: 'ROAS 최적화 - 라이프스타일 × 높은 스크롤 깊이 조합 집중',
     description: 'ROAS 6.8x 달성 세그먼트에 광고 예산의 35%를 재배치하여 전체 ROAS를 4.2x에서 5.1x로 상승시킵니다.',
     priority: 'high',
     impact: 21,
@@ -367,7 +367,7 @@ const actionPlan = ref([
   },
   {
     title: '신규 고객 ROAS 강화 - 테크 콘텐츠 타겟팅',
-    description: '테크 콘텐츠 × 중간 탐색 조합에 신규 고객 맞춤형 광고를 배치하여 신규 고객 ROAS를 3.8x에서 4.6x로 향상시킵니다.',
+    description: '테크 콘텐츠 × 중간 스크롤 깊이 조합에 신규 고객 맞춤형 광고를 배치하여 신규 고객 ROAS를 3.8x에서 4.6x로 향상시킵니다.',
     priority: 'medium',
     impact: 21,
     duration: '3주',
@@ -380,8 +380,8 @@ const actionPlan = ref([
 const aiInsights = ref([
   {
     icon: '💰',
-    title: 'ROAS 4.2x 달성 - 라이프스타일 × 깊은 탐색 조합이 핵심',
-    message: '라이프스타일 콘텐츠에서 깊은 탐색(80%+) 사용자 세그먼트의 ROAS가 6.8x로 전체 평균 대비 62% 높습니다.'
+    title: 'ROAS 4.2x 달성 - 라이프스타일 × 높은 스크롤 깊이 조합이 핵심',
+    message: '라이프스타일 콘텐츠에서 높은 스크롤 깊이(80%+) 사용자 세그먼트의 ROAS가 6.8x로 전체 평균 대비 62% 높습니다.'
   },
   {
     icon: '📈',
@@ -390,8 +390,8 @@ const aiInsights = ref([
   },
   {
     icon: '🎯',
-    title: '신규 고객 ROAS 3.8x - 테크 콘텐츠 × 중간 탐색 조합 발견',
-    message: '테크 콘텐츠에서 중간 탐색(60-80%) 구간의 신규 고객 ROAS가 5.2x로 높습니다.'
+    title: '신규 고객 ROAS 3.8x - 테크 콘텐츠 × 중간 스크롤 깊이 조합 발견',
+    message: '테크 콘텐츠에서 중간 스크롤 깊이(60-80%) 구간의 신규 고객 ROAS가 5.2x로 높습니다.'
   }
 ])
 
