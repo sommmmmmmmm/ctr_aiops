@@ -1,52 +1,70 @@
 <template>
   <div class="client-dashboard">
-    <!-- 핵심 비즈니스 지표 -->
+    <!-- 핵심 마케팅 KPI -->
     <el-row :gutter="20" class="kpi-row">
-      <el-col :span="8">
+      <el-col :span="6">
         <el-card class="kpi-card gradient-blue">
           <div class="kpi-content">
             <div class="kpi-icon">
               <el-icon :size="40"><TrendCharts /></el-icon>
             </div>
             <div class="kpi-info">
-              <div class="kpi-label">예측 클릭률 (CTR)</div>
-              <div class="kpi-value">{{ businessMetrics.predictedCTR }}%</div>
+              <div class="kpi-label">ROAS</div>
+              <div class="kpi-value">{{ businessMetrics.roas }}x</div>
               <div class="kpi-change positive">
                 <el-icon><CaretTop /></el-icon>
-                전월 대비 +{{ businessMetrics.ctrChange }}%
+                전월 대비 +{{ businessMetrics.roasChange }}%
               </div>
             </div>
           </div>
         </el-card>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <el-card class="kpi-card gradient-green">
-          <div class="kpi-content">
-            <div class="kpi-icon">
-              <el-icon :size="40"><Money /></el-icon>
-            </div>
-            <div class="kpi-info">
-              <div class="kpi-label">예상 ROI 증대</div>
-              <div class="kpi-value">+{{ businessMetrics.roiIncrease }}%</div>
-              <div class="kpi-subtext">
-                월 예상 추가 매출: {{ businessMetrics.additionalRevenue }}만원
-              </div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card class="kpi-card gradient-purple">
           <div class="kpi-content">
             <div class="kpi-icon">
               <el-icon :size="40"><User /></el-icon>
             </div>
             <div class="kpi-info">
-              <div class="kpi-label">타겟 전환율</div>
-              <div class="kpi-value">{{ businessMetrics.conversionRate }}%</div>
+              <div class="kpi-label">CAC</div>
+              <div class="kpi-value">{{ businessMetrics.cac.toLocaleString() }}원</div>
+              <div class="kpi-change positive">
+                <el-icon><CaretBottom /></el-icon>
+                전월 대비 {{ businessMetrics.cacChange }}%
+              </div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card class="kpi-card gradient-purple">
+          <div class="kpi-content">
+            <div class="kpi-icon">
+              <el-icon :size="40"><Money /></el-icon>
+            </div>
+            <div class="kpi-info">
+              <div class="kpi-label">LTV</div>
+              <div class="kpi-value">{{ businessMetrics.ltv.toLocaleString() }}원</div>
               <div class="kpi-change positive">
                 <el-icon><CaretTop /></el-icon>
-                전월 대비 +{{ businessMetrics.conversionChange }}%
+                전월 대비 +{{ businessMetrics.ltvChange }}%
+              </div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card class="kpi-card gradient-orange">
+          <div class="kpi-content">
+            <div class="kpi-icon">
+              <el-icon :size="40"><DataAnalysis /></el-icon>
+            </div>
+            <div class="kpi-info">
+              <div class="kpi-label">신규 고객 ROAS</div>
+              <div class="kpi-value">{{ businessMetrics.newCustomerROAS }}x</div>
+              <div class="kpi-change positive">
+                <el-icon><CaretTop /></el-icon>
+                전월 대비 +{{ businessMetrics.newCustomerROASChange }}%
               </div>
             </div>
           </div>
@@ -173,16 +191,24 @@
               </div>
               <div class="segment-metrics">
                 <div class="metric">
-                  <span class="metric-label">클릭률</span>
+                  <span class="metric-label">ROAS</span>
+                  <span class="metric-value">{{ segment.roas }}x</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">CAC</span>
+                  <span class="metric-value">{{ segment.cac.toLocaleString() }}원</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">LTV</span>
+                  <span class="metric-value">{{ segment.ltv.toLocaleString() }}원</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">CTR</span>
                   <span class="metric-value">{{ segment.ctr }}%</span>
                 </div>
                 <div class="metric">
-                  <span class="metric-label">전환율</span>
-                  <span class="metric-value">{{ segment.conversion }}%</span>
-                </div>
-                <div class="metric">
-                  <span class="metric-label">평균 구매액</span>
-                  <span class="metric-value">{{ segment.avgPurchase }}원</span>
+                  <span class="metric-label">CVR</span>
+                  <span class="metric-value">{{ segment.cvr }}%</span>
                 </div>
                 <div class="metric">
                   <span class="metric-label">상관계수</span>
@@ -288,11 +314,11 @@
                   </div>
                   <div class="detail-item">
                     <el-icon><TrendCharts /></el-icon>
-                    <span>ROI: {{ strategy.roi }}%</span>
+                    <span>예상 ROAS: {{ strategy.expectedROAS }}x</span>
                   </div>
                   <div class="detail-item">
-                    <el-icon><DataAnalysis /></el-icon>
-                    <span>상관계수: {{ strategy.correlation }}</span>
+                    <el-icon><User /></el-icon>
+                    <span>예상 CAC: {{ strategy.expectedCAC.toLocaleString() }}원</span>
                   </div>
                 </div>
                 <el-button
@@ -320,6 +346,7 @@ import {
   Money,
   User,
   CaretTop,
+  CaretBottom,
   Upload,
   Document,
   Download,
@@ -336,53 +363,61 @@ const router = useRouter()
 // State
 const downloadingPDF = ref(false)
 
-// 비즈니스 지표
+// 핵심 마케팅 KPI
 const businessMetrics = ref({
-  predictedCTR: 3.8,
-  ctrChange: 12.5,
-  roiIncrease: 25,
-  additionalRevenue: 1250,
-  conversionRate: 4.2,
-  conversionChange: 8.3
+  roas: 4.2, // Return On Ad Spend
+  roasChange: 15.3,
+  cac: 12500, // Customer Acquisition Cost
+  cacChange: -8.2,
+  ltv: 185000, // Customer Lifetime Value
+  ltvChange: 12.7,
+  mer: 0.28, // Marketing Efficiency Ratio
+  merChange: 5.1,
+  newCustomerROAS: 3.8,
+  newCustomerROASChange: 22.1,
+  vtr: 2.3, // View-Through Rate
+  vtrChange: 18.5
 })
 
-// AI 인사이트 - 피처 상관관계 기반 깊은 분석
+// AI 인사이트 - 마케팅 KPI 기반 전략적 인사이트
 const aiInsights = ref([
   {
-    icon: '🎯',
+    icon: '💰',
     type: 'success',
-    title: '콘텐츠 카테고리 ID 15 + 스크롤 깊이 80% 이상 조합 최적화',
-    message: '콘텐츠 카테고리 ID 15(라이프스타일)에서 스크롤 깊이 80% 이상 사용자의 CTR이 7.3%로 평균 대비 340% 높습니다. 이 조합에 광고 예산의 40%를 집중하면 ROI가 45% 증가할 것으로 예상됩니다.',
-    details: ['카테고리 ID 15 CTR: 7.3%', '스크롤 깊이 상관계수: 0.78', '예상 ROI 증가: +45%'],
-    action: '콘텐츠-스크롤 최적화'
+    title: 'ROAS 4.2x 달성 - 카테고리 ID 15 × 스크롤 80%+ 조합이 핵심',
+    message: '카테고리 ID 15(라이프스타일)에서 스크롤 깊이 80% 이상 사용자 세그먼트의 ROAS가 6.8x로 전체 평균 대비 62% 높습니다. 이 조합에 광고 예산의 35%를 재배치하면 전체 ROAS가 5.1x로 상승할 것으로 예상됩니다.',
+    details: ['조합 ROAS: 6.8x', '현재 전체 ROAS: 4.2x', '예상 ROAS 증가: +21%'],
+    action: '예산 재배치 실행'
   },
   {
-    icon: '📊',
+    icon: '📈',
     type: 'warning',
-    title: '7일 노출 횟수 3-5회 세그먼트 과소노출 문제',
-    message: '7일 노출 횟수 3-5회 사용자 그룹의 전환율이 8.2%로 최고 수준이지만, 현재 광고 노출은 전체의 12%에 불과합니다. 이 세그먼트의 노출을 25%로 증가시키면 즉각적인 성과 개선이 가능합니다.',
-    details: ['3-5회 노출 전환율: 8.2%', '현재 노출 비율: 12%', '예상 개선: +28%'],
+    title: 'CAC 최적화 기회 - 7일 노출 3-5회 세그먼트 과소노출',
+    message: '7일 노출 횟수 3-5회 사용자 그룹의 CAC가 8,500원으로 전체 평균 대비 32% 낮습니다. 현재 이 세그먼트 노출이 12%에 불과하므로, 25%로 증가시키면 전체 CAC를 10,200원까지 낮출 수 있습니다.',
+    details: ['세그먼트 CAC: 8,500원', '현재 전체 CAC: 12,500원', '예상 CAC 감소: -18%'],
     action: '노출 빈도 최적화'
   },
   {
-    icon: '🔍',
+    icon: '🎯',
     type: 'info',
-    title: '스크롤 깊이 60-80% + 카테고리 ID 8 조합 발견',
-    message: '스크롤 깊이 60-80% 구간에서 카테고리 ID 8(테크) 콘텐츠의 CTR이 5.8%로 높은 상관관계를 보입니다. 이 조합에 맞춤형 광고를 배치하면 전환율이 35% 향상될 것으로 예상됩니다.',
-    details: ['조합 CTR: 5.8%', '상관계수: 0.65', '예상 전환율 증가: +35%'],
-    action: '맞춤형 광고 배치'
+    title: '신규 고객 ROAS 3.8x - 테크 카테고리 × 스크롤 60-80% 조합 발견',
+    message: '카테고리 ID 8(테크)에서 스크롤 깊이 60-80% 구간의 신규 고객 ROAS가 5.2x로 높습니다. 이 조합에 맞춤형 신규 고객 타겟팅을 적용하면 신규 고객 ROAS가 4.6x로 향상될 것으로 예상됩니다.',
+    details: ['조합 신규 ROAS: 5.2x', '현재 신규 ROAS: 3.8x', '예상 신규 ROAS 증가: +21%'],
+    action: '신규 고객 타겟팅 강화'
   }
 ])
 
-// 고객 세그먼트 - 피처 기반 세분화 분석
+// 고객 세그먼트 - 마케팅 KPI 기반 세분화 분석
 const customerSegments = ref([
   {
     name: '카테고리 ID 15 + 스크롤 80%+',
     performance: 'success',
     label: '최우수',
+    roas: 6.8,
+    cac: 8500,
+    ltv: 245000,
     ctr: 7.3,
-    conversion: 9.1,
-    avgPurchase: 125000,
+    cvr: 12.5,
     potential: 92,
     correlation: 0.78
   },
@@ -390,9 +425,11 @@ const customerSegments = ref([
     name: '7일 노출 3-5회 그룹',
     performance: 'success',
     label: '우수',
+    roas: 5.2,
+    cac: 9200,
+    ltv: 198000,
     ctr: 6.2,
-    conversion: 8.2,
-    avgPurchase: 98000,
+    cvr: 10.8,
     potential: 88,
     correlation: 0.72
   },
@@ -400,9 +437,11 @@ const customerSegments = ref([
     name: '카테고리 ID 8 + 스크롤 60-80%',
     performance: 'warning',
     label: '보통',
+    roas: 4.1,
+    cac: 11200,
+    ltv: 165000,
     ctr: 5.8,
-    conversion: 6.5,
-    avgPurchase: 87000,
+    cvr: 8.9,
     potential: 75,
     correlation: 0.65
   },
@@ -410,9 +449,11 @@ const customerSegments = ref([
     name: '카테고리 ID 3 + 스크롤 40-60%',
     performance: 'info',
     label: '개선 필요',
+    roas: 2.8,
+    cac: 15800,
+    ltv: 125000,
     ctr: 3.1,
-    conversion: 4.2,
-    avgPurchase: 65000,
+    cvr: 5.2,
     potential: 52,
     correlation: 0.41
   }
@@ -467,42 +508,45 @@ const optimalTimeSlots = ref([
   }
 ])
 
-// 마케팅 전략 - 피처 상관관계 기반 전략
+// 마케팅 전략 - KPI 기반 전략적 실행 계획
 const marketingStrategies = ref([
   {
     id: 1,
     priority: 'high',
     priorityLabel: '높은 우선순위',
-    title: '콘텐츠-스크롤 조합 최적화',
-    description: '카테고리 ID 15 + 스크롤 깊이 80% 이상 조합에 맞춤형 광고를 제작하고, 광고 예산의 40%를 배정합니다.',
-    impact: 45,
+    title: 'ROAS 최적화 - 카테고리 ID 15 × 스크롤 80%+ 조합 집중',
+    description: 'ROAS 6.8x 달성 세그먼트에 광고 예산의 35%를 재배치하여 전체 ROAS를 4.2x에서 5.1x로 상승시킵니다.',
+    impact: 21,
     duration: '2주',
-    budget: '600만원',
-    roi: 320,
+    budget: '800만원',
+    expectedROAS: 5.1,
+    expectedCAC: 10200,
     correlation: 0.78
   },
   {
     id: 2,
     priority: 'high',
     priorityLabel: '높은 우선순위',
-    title: '7일 노출 빈도 최적화',
-    description: '7일 노출 횟수 3-5회 세그먼트의 광고 노출을 25%로 증가시키고, 맞춤형 리타겟팅을 강화합니다.',
-    impact: 28,
+    title: 'CAC 최적화 - 7일 노출 3-5회 세그먼트 확대',
+    description: 'CAC 8,500원 달성 세그먼트의 노출을 12%에서 25%로 증가시켜 전체 CAC를 12,500원에서 10,200원으로 감소시킵니다.',
+    impact: 18,
     duration: '1주',
-    budget: '400만원',
-    roi: 220,
+    budget: '500만원',
+    expectedROAS: 4.8,
+    expectedCAC: 10200,
     correlation: 0.72
   },
   {
     id: 3,
     priority: 'medium',
     priorityLabel: '중간 우선순위',
-    title: '테크 카테고리 스크롤 최적화',
-    description: '카테고리 ID 8 + 스크롤 깊이 60-80% 조합에 맞춤형 광고 소재를 개발하고 배치를 최적화합니다.',
-    impact: 35,
+    title: '신규 고객 ROAS 강화 - 테크 카테고리 타겟팅',
+    description: '카테고리 ID 8 × 스크롤 60-80% 조합에 신규 고객 맞춤형 광고를 배치하여 신규 고객 ROAS를 3.8x에서 4.6x로 향상시킵니다.',
+    impact: 21,
     duration: '3주',
-    budget: '500만원',
-    roi: 180,
+    budget: '600만원',
+    expectedROAS: 4.6,
+    expectedCAC: 11500,
     correlation: 0.65
   }
 ])
@@ -631,6 +675,11 @@ const getPriorityType = (priority) => {
 
 .gradient-purple {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.gradient-orange {
+  background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
   color: white;
 }
 
@@ -790,8 +839,8 @@ const getPriorityType = (priority) => {
 
 .segment-metrics {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
   margin-bottom: 12px;
 }
 
