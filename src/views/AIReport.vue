@@ -261,50 +261,50 @@ const reportData = ref({
 })
 
 const featureImportance = ref([
-  { feature: 'content_category_id', importance: 0.456, pValue: 0.0001, ci: [0.42, 0.49] },
-  { feature: 'scroll_depth_percentage', importance: 0.389, pValue: 0.0002, ci: [0.35, 0.43] },
-  { feature: 'impression_count_7d', importance: 0.324, pValue: 0.0003, ci: [0.29, 0.36] },
-  { feature: 'interaction_uplift', importance: 0.287, pValue: 0.0005, ci: [0.25, 0.32] },
-  { feature: 'cohort_retention_rate', importance: 0.251, pValue: 0.0008, ci: [0.22, 0.28] },
-  { feature: 'incremental_lift', importance: 0.218, pValue: 0.001, ci: [0.19, 0.25] },
-  { feature: 'attribution_window_7d', importance: 0.198, pValue: 0.002, ci: [0.17, 0.23] },
-  { feature: 'view_through_conversion', importance: 0.176, pValue: 0.003, ci: [0.15, 0.20] },
-  { feature: 'engagement_metrics', importance: 0.145, pValue: 0.008, ci: [0.12, 0.17] },
-  { feature: 'bounce_rate', importance: 0.132, pValue: 0.012, ci: [0.11, 0.15] }
+  { feature: '콘텐츠유형', importance: 0.456, pValue: 0.0001, ci: [0.42, 0.49] },
+  { feature: '페이지탐색도', importance: 0.389, pValue: 0.0002, ci: [0.35, 0.43] },
+  { feature: '노출빈도', importance: 0.324, pValue: 0.0003, ci: [0.29, 0.36] },
+  { feature: '조합효과', importance: 0.287, pValue: 0.0005, ci: [0.25, 0.32] },
+  { feature: '재방문율', importance: 0.251, pValue: 0.0008, ci: [0.22, 0.28] },
+  { feature: '증분효과', importance: 0.218, pValue: 0.001, ci: [0.19, 0.25] },
+  { feature: '7일기여도', importance: 0.198, pValue: 0.002, ci: [0.17, 0.23] },
+  { feature: '간접전환', importance: 0.176, pValue: 0.003, ci: [0.15, 0.20] },
+  { feature: '참여지표', importance: 0.145, pValue: 0.008, ci: [0.12, 0.17] },
+  { feature: '이탈률', importance: 0.132, pValue: 0.012, ci: [0.11, 0.15] }
 ])
 
 const topFeatures = ref([
   {
-    name: 'content_category_id (콘텐츠 카테고리)',
-    description: '카테고리 ID 15(라이프스타일)에서 ROAS 6.8x 달성',
+    name: '콘텐츠 유형',
+    description: '라이프스타일 콘텐츠에서 ROAS 6.8x 달성',
     importance: 0.456,
     pValue: 0.0001,
     color: '#f56c6c'
   },
   {
-    name: 'scroll_depth_percentage (스크롤 깊이)',
-    description: '스크롤 80% 이상에서 CTR 7.3%로 평균 대비 340% 높음',
+    name: '페이지 탐색도',
+    description: '깊은 탐색(80%+)에서 CTR 7.3%로 평균 대비 340% 높음',
     importance: 0.389,
     pValue: 0.0002,
     color: '#e6a23c'
   },
   {
-    name: 'impression_count_7d (7일 노출 횟수)',
-    description: '3-5회 노출 세그먼트에서 CAC 8,500원으로 최적',
+    name: '노출 빈도',
+    description: '적정 노출(3-5회) 세그먼트에서 CAC 8,500원으로 최적',
     importance: 0.324,
     pValue: 0.0003,
     color: '#409eff'
   },
   {
-    name: 'interaction_uplift (상호작용 효과)',
-    description: '카테고리 × 스크롤 조합이 ROAS를 62% 향상',
+    name: '조합 효과',
+    description: '콘텐츠 × 탐색도 조합이 ROAS를 62% 향상',
     importance: 0.287,
     pValue: 0.0005,
     color: '#67c23a'
   },
   {
-    name: 'cohort_retention_rate (코호트 리텐션)',
-    description: '신규 고객 7일 리텐션율이 LTV에 직접적 영향',
+    name: '재방문율',
+    description: '신규 고객 7일 재방문율이 LTV에 직접적 영향',
     importance: 0.251,
     pValue: 0.0008,
     color: '#909399'
@@ -312,7 +312,7 @@ const topFeatures = ref([
 ])
 
 const correlationData = ref({
-  features: ['content_category', 'scroll_depth', 'impression_7d', 'interaction_uplift', 'cohort_retention'],
+  features: ['콘텐츠유형', '페이지탐색도', '노출빈도', '조합효과', '재방문율'],
   matrix: [
     [1.0, 0.78, 0.45, 0.62, 0.35],
     [0.78, 1.0, 0.52, 0.68, 0.28],
@@ -324,31 +324,31 @@ const correlationData = ref({
 
 const lowImpactFeatures = ref([
   {
-    feature: 'device_type',
+    feature: '디바이스유형',
     importance: 0.045,
     pValue: 0.152,
     status: 'low_impact',
     recommendation: '모바일 최적화에 집중하되 우선순위 낮춤'
   },
   {
-    feature: 'day_of_week',
+    feature: '요일',
     importance: 0.032,
     pValue: 0.234,
     status: 'low_impact',
     recommendation: '요일별 세분화 대신 시간대 집중'
   },
   {
-    feature: 'gender',
+    feature: '성별',
     importance: 0.028,
     pValue: 0.312,
     status: 'low_impact',
-    recommendation: '성별보다 콘텐츠 카테고리 기반 타겟팅'
+    recommendation: '성별보다 콘텐츠 유형 기반 타겟팅'
   }
 ])
 
 const actionPlan = ref([
   {
-    title: 'ROAS 최적화 - 카테고리 ID 15 × 스크롤 80%+ 조합 집중',
+    title: 'ROAS 최적화 - 라이프스타일 × 깊은 탐색 조합 집중',
     description: 'ROAS 6.8x 달성 세그먼트에 광고 예산의 35%를 재배치하여 전체 ROAS를 4.2x에서 5.1x로 상승시킵니다.',
     priority: 'high',
     impact: 21,
@@ -357,7 +357,7 @@ const actionPlan = ref([
     color: '#f56c6c'
   },
   {
-    title: 'CAC 최적화 - 7일 노출 3-5회 세그먼트 확대',
+    title: 'CAC 최적화 - 적정 노출 세그먼트 확대',
     description: 'CAC 8,500원 달성 세그먼트의 노출을 12%에서 25%로 증가시켜 전체 CAC를 12,500원에서 10,200원으로 감소시킵니다.',
     priority: 'high',
     impact: 18,
@@ -366,8 +366,8 @@ const actionPlan = ref([
     color: '#e6a23c'
   },
   {
-    title: '신규 고객 ROAS 강화 - 테크 카테고리 타겟팅',
-    description: '카테고리 ID 8 × 스크롤 60-80% 조합에 신규 고객 맞춤형 광고를 배치하여 신규 고객 ROAS를 3.8x에서 4.6x로 향상시킵니다.',
+    title: '신규 고객 ROAS 강화 - 테크 콘텐츠 타겟팅',
+    description: '테크 콘텐츠 × 중간 탐색 조합에 신규 고객 맞춤형 광고를 배치하여 신규 고객 ROAS를 3.8x에서 4.6x로 향상시킵니다.',
     priority: 'medium',
     impact: 21,
     duration: '3주',
@@ -380,18 +380,18 @@ const actionPlan = ref([
 const aiInsights = ref([
   {
     icon: '💰',
-    title: 'ROAS 4.2x 달성 - 카테고리 ID 15 × 스크롤 80%+ 조합이 핵심',
-    message: '카테고리 ID 15(라이프스타일)에서 스크롤 깊이 80% 이상 사용자 세그먼트의 ROAS가 6.8x로 전체 평균 대비 62% 높습니다.'
+    title: 'ROAS 4.2x 달성 - 라이프스타일 × 깊은 탐색 조합이 핵심',
+    message: '라이프스타일 콘텐츠에서 깊은 탐색(80%+) 사용자 세그먼트의 ROAS가 6.8x로 전체 평균 대비 62% 높습니다.'
   },
   {
     icon: '📈',
-    title: 'CAC 최적화 기회 - 7일 노출 3-5회 세그먼트 과소노출',
-    message: '7일 노출 횟수 3-5회 사용자 그룹의 CAC가 8,500원으로 전체 평균 대비 32% 낮습니다.'
+    title: 'CAC 최적화 기회 - 적정 노출 세그먼트 과소노출',
+    message: '적정 노출(3-5회) 사용자 그룹의 CAC가 8,500원으로 전체 평균 대비 32% 낮습니다.'
   },
   {
     icon: '🎯',
-    title: '신규 고객 ROAS 3.8x - 테크 카테고리 × 스크롤 60-80% 조합 발견',
-    message: '카테고리 ID 8(테크)에서 스크롤 깊이 60-80% 구간의 신규 고객 ROAS가 5.2x로 높습니다.'
+    title: '신규 고객 ROAS 3.8x - 테크 콘텐츠 × 중간 탐색 조합 발견',
+    message: '테크 콘텐츠에서 중간 탐색(60-80%) 구간의 신규 고객 ROAS가 5.2x로 높습니다.'
   }
 ])
 
