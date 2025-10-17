@@ -435,7 +435,7 @@ const marketingTerms = ref([
 // 고객 세그먼트 - 마케팅 KPI 기반 세분화 분석
 const customerSegments = ref([
   {
-    name: 'Content Category 15 + High Scroll Depth',
+    name: '라이프스타일 + 높은 스크롤 깊이 (Content Category 15 + High Scroll Depth)',
     performance: 'success',
     label: '최우수',
     roas: 6.8,
@@ -447,7 +447,7 @@ const customerSegments = ref([
     correlation: 0.78
   },
   {
-    name: 'Optimal Frequency Segment',
+    name: '적정 노출 그룹 (Optimal Frequency Segment)',
     performance: 'success',
     label: '우수',
     roas: 5.2,
@@ -459,7 +459,7 @@ const customerSegments = ref([
     correlation: 0.72
   },
   {
-    name: 'Tech Category + Medium Scroll Depth',
+    name: '테크 + 중간 스크롤 깊이 (Tech Category + Medium Scroll Depth)',
     performance: 'warning',
     label: '보통',
     roas: 4.1,
@@ -471,7 +471,7 @@ const customerSegments = ref([
     correlation: 0.65
   },
   {
-    name: 'General Category + Low Scroll Depth',
+    name: '일반 + 낮은 스크롤 깊이 (General Category + Low Scroll Depth)',
     performance: 'info',
     label: '개선 필요',
     roas: 2.8,

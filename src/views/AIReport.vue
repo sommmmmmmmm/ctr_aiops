@@ -261,49 +261,49 @@ const reportData = ref({
 })
 
 const featureImportance = ref([
-  { feature: '콘텐츠유형', importance: 0.456, pValue: 0.0001, ci: [0.42, 0.49] },
-  { feature: '스크롤깊이', importance: 0.389, pValue: 0.0002, ci: [0.35, 0.43] },
-  { feature: '노출빈도', importance: 0.324, pValue: 0.0003, ci: [0.29, 0.36] },
-  { feature: '조합효과', importance: 0.287, pValue: 0.0005, ci: [0.25, 0.32] },
-  { feature: '재방문율', importance: 0.251, pValue: 0.0008, ci: [0.22, 0.28] },
-  { feature: '증분효과', importance: 0.218, pValue: 0.001, ci: [0.19, 0.25] },
-  { feature: '7일기여도', importance: 0.198, pValue: 0.002, ci: [0.17, 0.23] },
-  { feature: '간접전환', importance: 0.176, pValue: 0.003, ci: [0.15, 0.20] },
-  { feature: '참여지표', importance: 0.145, pValue: 0.008, ci: [0.12, 0.17] },
-  { feature: '이탈률', importance: 0.132, pValue: 0.012, ci: [0.11, 0.15] }
+  { feature: '콘텐츠유형 (Content Category)', importance: 0.456, pValue: 0.0001, ci: [0.42, 0.49] },
+  { feature: '스크롤깊이 (Scroll Depth)', importance: 0.389, pValue: 0.0002, ci: [0.35, 0.43] },
+  { feature: '노출빈도 (Impression Frequency)', importance: 0.324, pValue: 0.0003, ci: [0.29, 0.36] },
+  { feature: '조합효과 (Interaction Uplift)', importance: 0.287, pValue: 0.0005, ci: [0.25, 0.32] },
+  { feature: '재방문율 (Cohort Retention)', importance: 0.251, pValue: 0.0008, ci: [0.22, 0.28] },
+  { feature: '증분효과 (Incremental Lift)', importance: 0.218, pValue: 0.001, ci: [0.19, 0.25] },
+  { feature: '7일기여도 (7-day Attribution)', importance: 0.198, pValue: 0.002, ci: [0.17, 0.23] },
+  { feature: '간접전환 (View-through Conversion)', importance: 0.176, pValue: 0.003, ci: [0.15, 0.20] },
+  { feature: '참여지표 (Engagement Metrics)', importance: 0.145, pValue: 0.008, ci: [0.12, 0.17] },
+  { feature: '이탈률 (Bounce Rate)', importance: 0.132, pValue: 0.012, ci: [0.11, 0.15] }
 ])
 
 const topFeatures = ref([
   {
-    name: '콘텐츠 유형',
+    name: '콘텐츠 유형 (Content Category)',
     description: '라이프스타일 콘텐츠에서 ROAS 6.8x 달성',
     importance: 0.456,
     pValue: 0.0001,
     color: '#f56c6c'
   },
   {
-    name: '스크롤 깊이',
+    name: '스크롤 깊이 (Scroll Depth)',
     description: '높은 스크롤 깊이(80%+)에서 CTR 7.3%로 평균 대비 340% 높음',
     importance: 0.389,
     pValue: 0.0002,
     color: '#e6a23c'
   },
   {
-    name: '노출 빈도',
+    name: '노출 빈도 (Impression Frequency)',
     description: '적정 노출(3-5회) 세그먼트에서 CAC 8,500원으로 최적',
     importance: 0.324,
     pValue: 0.0003,
     color: '#409eff'
   },
   {
-    name: '조합 효과',
+    name: '조합 효과 (Interaction Uplift)',
     description: '콘텐츠 × 스크롤 깊이 조합이 ROAS를 62% 향상',
     importance: 0.287,
     pValue: 0.0005,
     color: '#67c23a'
   },
   {
-    name: '재방문율',
+    name: '재방문율 (Cohort Retention)',
     description: '신규 고객 7일 재방문율이 LTV에 직접적 영향',
     importance: 0.251,
     pValue: 0.0008,
