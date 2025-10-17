@@ -340,7 +340,7 @@
       <el-col :span="24">
         <el-card>
           <template #header>
-            <span>📚 마케팅 용어 참고표</span>
+            <span>📚 용어 참고</span>
           </template>
           <el-table :data="marketingTerms" style="width: 100%" size="small">
             <el-table-column prop="term" label="용어" width="200" />
