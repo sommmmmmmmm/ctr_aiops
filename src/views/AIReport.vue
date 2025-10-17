@@ -58,30 +58,39 @@
         <h2>{{ reportData.title }}</h2>
         <p class="summary-text">{{ reportData.summary }}</p>
         <el-row :gutter="20" style="margin-top: 20px">
-          <el-col :span="8">
+          <el-col :span="6">
             <div class="summary-metric">
-              <div class="metric-icon">📊</div>
+              <div class="metric-icon">📈</div>
               <div class="metric-info">
-                <div class="metric-label">예상 ROI 증대</div>
-                <div class="metric-value">+{{ reportData.roiIncrease }}%</div>
+                <div class="metric-label">현재 ROAS</div>
+                <div class="metric-value">{{ reportData.roas }}x</div>
               </div>
             </div>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <div class="summary-metric">
-              <div class="metric-icon">📊</div>
+              <div class="metric-icon">👥</div>
               <div class="metric-info">
-                <div class="metric-label">모델 정확도</div>
-                <div class="metric-value">{{ reportData.accuracy }}%</div>
+                <div class="metric-label">현재 CAC</div>
+                <div class="metric-value">{{ reportData.cac.toLocaleString() }}원</div>
               </div>
             </div>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <div class="summary-metric">
               <div class="metric-icon">💰</div>
               <div class="metric-info">
-                <div class="metric-label">예상 추가 매출</div>
-                <div class="metric-value">{{ reportData.additionalRevenue }}M</div>
+                <div class="metric-label">현재 LTV</div>
+                <div class="metric-value">{{ reportData.ltv.toLocaleString() }}원</div>
+              </div>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div class="summary-metric">
+              <div class="metric-icon">🎯</div>
+              <div class="metric-info">
+                <div class="metric-label">예상 ROAS 증가</div>
+                <div class="metric-value">+{{ reportData.roiIncrease }}%</div>
               </div>
             </div>
           </el-col>
@@ -203,7 +212,7 @@
                 </div>
                 <p>{{ action.description }}</p>
                 <div class="action-metrics">
-                  <span>예상 효과: <strong>+{{ action.impact }}%</strong></span>
+                  <span>예상 ROAS 증가: <strong>+{{ action.impact }}%</strong></span>
                   <span>실행 기간: <strong>{{ action.duration }}</strong></span>
                   <span>예상 비용: <strong>{{ action.cost }}</strong></span>
                 </div>
@@ -241,125 +250,128 @@ const generatingClientPDF = ref(false)
 const runId = computed(() => route.params.runId || 'latest')
 
 const reportData = ref({
-  title: 'CTR 예측 모델 분석 보고서',
-  summary: '사용자 행동 패턴 분석 결과, 시간대와 사용자 세그먼트가 클릭률에 가장 큰 영향을 미치는 것으로 나타났습니다. 모바일 광고 최적화와 타겟 세그먼트 집중 공략을 통해 ROI를 25% 이상 증대시킬 수 있을 것으로 예상됩니다.',
-  accuracy: 87.5,
-  roiIncrease: 25,
-  additionalRevenue: 1.25
+  title: '마케팅 KPI 최적화 분석 보고서',
+  summary: '콘텐츠 카테고리 ID와 스크롤 깊이, 7일 노출 횟수 등 핵심 피처 분석 결과, ROAS 4.2x 달성과 CAC 최적화 기회를 발견했습니다. 카테고리 ID 15 × 스크롤 80%+ 조합에 예산을 재배치하면 전체 ROAS를 5.1x로 상승시킬 수 있을 것으로 예상됩니다.',
+  accuracy: 89.2,
+  roas: 4.2,
+  cac: 12500,
+  ltv: 185000,
+  roiIncrease: 21,
+  additionalRevenue: 2.8
 })
 
 const featureImportance = ref([
-  { feature: 'hour', importance: 0.342, pValue: 0.0001, ci: [0.31, 0.37] },
-  { feature: 'age_group', importance: 0.287, pValue: 0.0003, ci: [0.25, 0.32] },
-  { feature: 'ad_position_level1', importance: 0.251, pValue: 0.0005, ci: [0.22, 0.28] },
-  { feature: 'device_type', importance: 0.198, pValue: 0.002, ci: [0.17, 0.23] },
-  { feature: 'impression_count_7d', importance: 0.176, pValue: 0.003, ci: [0.15, 0.20] },
-  { feature: 'day_of_week', importance: 0.145, pValue: 0.008, ci: [0.12, 0.17] },
-  { feature: 'gender', importance: 0.132, pValue: 0.012, ci: [0.11, 0.15] },
-  { feature: 'avg_session_duration', importance: 0.118, pValue: 0.015, ci: [0.10, 0.14] },
-  { feature: 'historical_ctr_overall', importance: 0.095, pValue: 0.025, ci: [0.08, 0.11] },
-  { feature: 'user_click_rate_cat1', importance: 0.082, pValue: 0.035, ci: [0.07, 0.10] }
+  { feature: 'content_category_id', importance: 0.456, pValue: 0.0001, ci: [0.42, 0.49] },
+  { feature: 'scroll_depth_percentage', importance: 0.389, pValue: 0.0002, ci: [0.35, 0.43] },
+  { feature: 'impression_count_7d', importance: 0.324, pValue: 0.0003, ci: [0.29, 0.36] },
+  { feature: 'interaction_uplift', importance: 0.287, pValue: 0.0005, ci: [0.25, 0.32] },
+  { feature: 'cohort_retention_rate', importance: 0.251, pValue: 0.0008, ci: [0.22, 0.28] },
+  { feature: 'incremental_lift', importance: 0.218, pValue: 0.001, ci: [0.19, 0.25] },
+  { feature: 'attribution_window_7d', importance: 0.198, pValue: 0.002, ci: [0.17, 0.23] },
+  { feature: 'view_through_conversion', importance: 0.176, pValue: 0.003, ci: [0.15, 0.20] },
+  { feature: 'engagement_metrics', importance: 0.145, pValue: 0.008, ci: [0.12, 0.17] },
+  { feature: 'bounce_rate', importance: 0.132, pValue: 0.012, ci: [0.11, 0.15] }
 ])
 
 const topFeatures = ref([
   {
-    name: 'hour (시간대)',
-    description: '광고 노출 시간대가 CTR에 가장 큰 영향',
-    importance: 0.342,
+    name: 'content_category_id (콘텐츠 카테고리)',
+    description: '카테고리 ID 15(라이프스타일)에서 ROAS 6.8x 달성',
+    importance: 0.456,
     pValue: 0.0001,
     color: '#f56c6c'
   },
   {
-    name: 'age_group (연령대)',
-    description: '20-30대의 클릭률이 타 연령대 대비 45% 높음',
-    importance: 0.287,
-    pValue: 0.0003,
+    name: 'scroll_depth_percentage (스크롤 깊이)',
+    description: '스크롤 80% 이상에서 CTR 7.3%로 평균 대비 340% 높음',
+    importance: 0.389,
+    pValue: 0.0002,
     color: '#e6a23c'
   },
   {
-    name: 'ad_position (광고 위치)',
-    description: '상단 배치 광고의 CTR이 2.3배 높음',
-    importance: 0.251,
-    pValue: 0.0005,
+    name: 'impression_count_7d (7일 노출 횟수)',
+    description: '3-5회 노출 세그먼트에서 CAC 8,500원으로 최적',
+    importance: 0.324,
+    pValue: 0.0003,
     color: '#409eff'
   },
   {
-    name: 'device_type (디바이스)',
-    description: '모바일 사용자의 전환율이 19% 우수',
-    importance: 0.198,
-    pValue: 0.002,
+    name: 'interaction_uplift (상호작용 효과)',
+    description: '카테고리 × 스크롤 조합이 ROAS를 62% 향상',
+    importance: 0.287,
+    pValue: 0.0005,
     color: '#67c23a'
   },
   {
-    name: 'impression_count (노출 횟수)',
-    description: '7일 노출 횟수와 CTR의 강한 양의 상관관계',
-    importance: 0.176,
-    pValue: 0.003,
+    name: 'cohort_retention_rate (코호트 리텐션)',
+    description: '신규 고객 7일 리텐션율이 LTV에 직접적 영향',
+    importance: 0.251,
+    pValue: 0.0008,
     color: '#909399'
   }
 ])
 
 const correlationData = ref({
-  features: ['hour', 'age_group', 'device', 'position', 'gender'],
+  features: ['content_category', 'scroll_depth', 'impression_7d', 'interaction_uplift', 'cohort_retention'],
   matrix: [
-    [1.0, 0.12, -0.08, 0.25, 0.05],
-    [0.12, 1.0, 0.18, 0.15, 0.42],
-    [-0.08, 0.18, 1.0, -0.12, 0.08],
-    [0.25, 0.15, -0.12, 1.0, 0.03],
-    [0.05, 0.42, 0.08, 0.03, 1.0]
+    [1.0, 0.78, 0.45, 0.62, 0.35],
+    [0.78, 1.0, 0.52, 0.68, 0.28],
+    [0.45, 0.52, 1.0, 0.41, 0.58],
+    [0.62, 0.68, 0.41, 1.0, 0.33],
+    [0.35, 0.28, 0.58, 0.33, 1.0]
   ]
 })
 
 const lowImpactFeatures = ref([
   {
-    feature: 'connection_type',
-    importance: 0.012,
-    pValue: 0.452,
-    status: 'insignificant',
-    recommendation: '데이터 수집 중단 고려'
+    feature: 'device_type',
+    importance: 0.045,
+    pValue: 0.152,
+    status: 'low_impact',
+    recommendation: '모바일 최적화에 집중하되 우선순위 낮춤'
   },
   {
-    feature: 'language_preference',
-    importance: 0.008,
-    pValue: 0.678,
-    status: 'insignificant',
-    recommendation: '피처 제거 권장'
+    feature: 'day_of_week',
+    importance: 0.032,
+    pValue: 0.234,
+    status: 'low_impact',
+    recommendation: '요일별 세분화 대신 시간대 집중'
   },
   {
-    feature: 'feat_a_15',
-    importance: 0.005,
-    pValue: 0.821,
-    status: 'insignificant',
-    recommendation: '리소스 재배치 필요'
+    feature: 'gender',
+    importance: 0.028,
+    pValue: 0.312,
+    status: 'low_impact',
+    recommendation: '성별보다 콘텐츠 카테고리 기반 타겟팅'
   }
 ])
 
 const actionPlan = ref([
   {
-    title: '타겟 세그먼트 집중 공략',
-    description: '20-30대 여성 고객에게 광고 예산의 35% 배정. 맞춤형 소재 제작.',
+    title: 'ROAS 최적화 - 카테고리 ID 15 × 스크롤 80%+ 조합 집중',
+    description: 'ROAS 6.8x 달성 세그먼트에 광고 예산의 35%를 재배치하여 전체 ROAS를 4.2x에서 5.1x로 상승시킵니다.',
     priority: 'high',
-    impact: 28,
+    impact: 21,
     duration: '2주',
-    cost: '500만원',
+    cost: '800만원',
     color: '#f56c6c'
   },
   {
-    title: '프라임 타임 광고 증대',
-    description: '오후 8-10시 시간대 광고 노출 30% 증가. 경쟁 입찰 강화.',
+    title: 'CAC 최적화 - 7일 노출 3-5회 세그먼트 확대',
+    description: 'CAC 8,500원 달성 세그먼트의 노출을 12%에서 25%로 증가시켜 전체 CAC를 12,500원에서 10,200원으로 감소시킵니다.',
     priority: 'high',
-    impact: 22,
+    impact: 18,
     duration: '1주',
-    cost: '300만원',
+    cost: '500만원',
     color: '#e6a23c'
   },
   {
-    title: '모바일 광고 최적화',
-    description: '모바일 상단 배치 비율 70%로 증가. 크리에이티브 개선.',
+    title: '신규 고객 ROAS 강화 - 테크 카테고리 타겟팅',
+    description: '카테고리 ID 8 × 스크롤 60-80% 조합에 신규 고객 맞춤형 광고를 배치하여 신규 고객 ROAS를 3.8x에서 4.6x로 향상시킵니다.',
     priority: 'medium',
-    impact: 15,
+    impact: 21,
     duration: '3주',
-    cost: '400만원',
+    cost: '600만원',
     color: '#409eff'
   }
 ])
@@ -367,19 +379,19 @@ const actionPlan = ref([
 // AI 인사이트 데이터
 const aiInsights = ref([
   {
-    icon: 'target',
-    title: '20-30대 여성 타겟 집중',
-    message: '해당 세그먼트의 클릭률이 평균 대비 45% 높으며, 전환율도 32% 우수합니다.'
+    icon: '💰',
+    title: 'ROAS 4.2x 달성 - 카테고리 ID 15 × 스크롤 80%+ 조합이 핵심',
+    message: '카테고리 ID 15(라이프스타일)에서 스크롤 깊이 80% 이상 사용자 세그먼트의 ROAS가 6.8x로 전체 평균 대비 62% 높습니다.'
   },
   {
-    icon: '⏰',
-    title: '프라임 타임 광고 강화',
-    message: '오후 8-10시 시간대의 트래픽이 28%이지만, 광고 노출은 18%에 불과합니다.'
+    icon: '📈',
+    title: 'CAC 최적화 기회 - 7일 노출 3-5회 세그먼트 과소노출',
+    message: '7일 노출 횟수 3-5회 사용자 그룹의 CAC가 8,500원으로 전체 평균 대비 32% 낮습니다.'
   },
   {
-    icon: '📱',
-    title: '모바일 상단 배치 최적화',
-    message: '모바일 상단 배치 광고의 CTR이 하단 대비 2.3배 높습니다.'
+    icon: '🎯',
+    title: '신규 고객 ROAS 3.8x - 테크 카테고리 × 스크롤 60-80% 조합 발견',
+    message: '카테고리 ID 8(테크)에서 스크롤 깊이 60-80% 구간의 신규 고객 ROAS가 5.2x로 높습니다.'
   }
 ])
 
