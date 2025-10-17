@@ -1,3 +1,36 @@
+# CTR AIOps Frontend — version1 (Deployed UI, Tailwind removed)
+
+## Overview
+This package matches the currently deployed look. Tailwind CSS is removed. Element Plus and custom CSS remain.
+
+## Tech stack
+- Vue 3 + Vite
+- Vue Router, Pinia
+- Element Plus UI
+
+## Run locally
+```bash
+npm install
+npm run dev
+```
+
+## Build
+```bash
+npm run build
+```
+Output in `dist/`.
+
+## Backend connection
+- Dev proxy: configure in `vite.config.js` under `server.proxy['/api']`
+- Prod: handled by hosting rewrites as applicable
+
+## Deployment (Vercel)
+- Uses `vercel.json` with SPA rewrite to `/index.html`
+- No Tailwind/PostCSS required in this package
+
+## Files of note
+- `src/main.js`: Ensure there is no `import './style.css'`
+
 # SK AX AIOps Frontend
 
 AI 기반 광고 최적화 플랫폼의 프론트엔드 애플리케이션입니다.

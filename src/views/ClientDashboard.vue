@@ -184,6 +184,10 @@
                   <span class="metric-label">평균 구매액</span>
                   <span class="metric-value">{{ segment.avgPurchase }}원</span>
                 </div>
+                <div class="metric">
+                  <span class="metric-label">상관계수</span>
+                  <span class="metric-value">{{ segment.correlation }}</span>
+                </div>
               </div>
               <el-progress
                 :percentage="segment.potential"
@@ -225,6 +229,14 @@
                 <div class="time-traffic">
                   <span class="traffic-value">{{ timeSlot.traffic }}</span>
                   <span class="traffic-label">예상 트래픽</span>
+                </div>
+                <div class="time-scroll">
+                  <span class="scroll-value">{{ timeSlot.scrollDepth }}</span>
+                  <span class="scroll-label">스크롤 깊이</span>
+                </div>
+                <div class="time-exposure">
+                  <span class="exposure-value">{{ timeSlot.exposureCount }}</span>
+                  <span class="exposure-label">7일 노출</span>
                 </div>
               </div>
               <div v-if="timeSlot.isBest" class="best-badge">
@@ -278,6 +290,10 @@
                     <el-icon><TrendCharts /></el-icon>
                     <span>ROI: {{ strategy.roi }}%</span>
                   </div>
+                  <div class="detail-item">
+                    <el-icon><DataAnalysis /></el-icon>
+                    <span>상관계수: {{ strategy.correlation }}</span>
+                  </div>
                 </div>
                 <el-button
                   type="primary"
@@ -310,7 +326,8 @@ import {
   Clock,
   Star,
   Refresh,
-  Calendar
+  Calendar,
+  DataAnalysis
 } from '@element-plus/icons-vue'
 import api from '@/api'
 
@@ -329,147 +346,164 @@ const businessMetrics = ref({
   conversionChange: 8.3
 })
 
-// AI 인사이트
+// AI 인사이트 - 피처 상관관계 기반 깊은 분석
 const aiInsights = ref([
   {
     icon: '🎯',
     type: 'success',
-    title: '20-30대 여성 고객 집중 공략 권장',
-    message: '해당 세그먼트의 클릭률이 평균 대비 45% 높으며, 전환율도 32% 우수합니다. 광고 예산의 35%를 해당 세그먼트에 배정하면 ROI가 28% 증가할 것으로 예상됩니다.',
-    details: ['클릭률: 5.2%', '전환율: 6.8%', '평균 구매액: 85,000원'],
-    action: '전략 적용하기'
+    title: '콘텐츠 카테고리 ID 15 + 스크롤 깊이 80% 이상 조합 최적화',
+    message: '콘텐츠 카테고리 ID 15(라이프스타일)에서 스크롤 깊이 80% 이상 사용자의 CTR이 7.3%로 평균 대비 340% 높습니다. 이 조합에 광고 예산의 40%를 집중하면 ROI가 45% 증가할 것으로 예상됩니다.',
+    details: ['카테고리 ID 15 CTR: 7.3%', '스크롤 깊이 상관계수: 0.78', '예상 ROI 증가: +45%'],
+    action: '콘텐츠-스크롤 최적화'
   },
   {
-    icon: '⏰',
+    icon: '📊',
     type: 'warning',
-    title: '오후 8-10시 광고 집행 최적화 필요',
-    message: '해당 시간대의 트래픽이 전체의 28%를 차지하지만, 광고 노출은 18%에 불과합니다. 광고 예산을 재배치하면 즉각적인 성과 개선이 가능합니다.',
-    details: ['현재 트래픽: 28%', '현재 광고 노출: 18%', '예상 개선: +15%'],
-    action: '시간대 최적화'
+    title: '7일 노출 횟수 3-5회 세그먼트 과소노출 문제',
+    message: '7일 노출 횟수 3-5회 사용자 그룹의 전환율이 8.2%로 최고 수준이지만, 현재 광고 노출은 전체의 12%에 불과합니다. 이 세그먼트의 노출을 25%로 증가시키면 즉각적인 성과 개선이 가능합니다.',
+    details: ['3-5회 노출 전환율: 8.2%', '현재 노출 비율: 12%', '예상 개선: +28%'],
+    action: '노출 빈도 최적화'
   },
   {
-    icon: '📱',
+    icon: '🔍',
     type: 'info',
-    title: '모바일 광고 위치 상단 배치 권장',
-    message: '모바일 상단 배치 광고의 CTR이 하단 대비 2.3배 높습니다. 모바일 광고의 70%를 상단에 배치하는 것을 추천합니다.',
-    details: ['상단 CTR: 6.2%', '하단 CTR: 2.7%', '예상 개선: +23%'],
-    action: '배치 변경하기'
+    title: '스크롤 깊이 60-80% + 카테고리 ID 8 조합 발견',
+    message: '스크롤 깊이 60-80% 구간에서 카테고리 ID 8(테크) 콘텐츠의 CTR이 5.8%로 높은 상관관계를 보입니다. 이 조합에 맞춤형 광고를 배치하면 전환율이 35% 향상될 것으로 예상됩니다.',
+    details: ['조합 CTR: 5.8%', '상관계수: 0.65', '예상 전환율 증가: +35%'],
+    action: '맞춤형 광고 배치'
   }
 ])
 
-// 고객 세그먼트
+// 고객 세그먼트 - 피처 기반 세분화 분석
 const customerSegments = ref([
   {
-    name: '20-30대 여성',
+    name: '카테고리 ID 15 + 스크롤 80%+',
     performance: 'success',
     label: '최우수',
-    ctr: 5.2,
-    conversion: 6.8,
-    avgPurchase: 85000,
-    potential: 85
+    ctr: 7.3,
+    conversion: 9.1,
+    avgPurchase: 125000,
+    potential: 92,
+    correlation: 0.78
   },
   {
-    name: '30-40대 남성',
+    name: '7일 노출 3-5회 그룹',
     performance: 'success',
     label: '우수',
-    ctr: 4.1,
-    conversion: 5.2,
-    avgPurchase: 125000,
-    potential: 72
+    ctr: 6.2,
+    conversion: 8.2,
+    avgPurchase: 98000,
+    potential: 88,
+    correlation: 0.72
   },
   {
-    name: '40-50대 여성',
+    name: '카테고리 ID 8 + 스크롤 60-80%',
     performance: 'warning',
     label: '보통',
-    ctr: 2.8,
-    conversion: 3.5,
-    avgPurchase: 95000,
-    potential: 58
+    ctr: 5.8,
+    conversion: 6.5,
+    avgPurchase: 87000,
+    potential: 75,
+    correlation: 0.65
   },
   {
-    name: '50대 이상',
+    name: '카테고리 ID 3 + 스크롤 40-60%',
     performance: 'info',
     label: '개선 필요',
-    ctr: 1.9,
-    conversion: 2.1,
-    avgPurchase: 110000,
-    potential: 45
+    ctr: 3.1,
+    conversion: 4.2,
+    avgPurchase: 65000,
+    potential: 52,
+    correlation: 0.41
   }
 ])
 
-// 최적 시간대
+// 최적 시간대 - 스크롤 깊이와 노출 횟수 기반 분석
 const optimalTimeSlots = ref([
   {
     period: '06:00 - 10:00',
     ctr: 65,
     traffic: '중',
     color: '#67c23a',
-    isBest: false
+    isBest: false,
+    scrollDepth: '평균 45%',
+    exposureCount: '2.3회'
   },
   {
     period: '10:00 - 14:00',
     ctr: 72,
     traffic: '높음',
     color: '#409eff',
-    isBest: false
+    isBest: false,
+    scrollDepth: '평균 52%',
+    exposureCount: '3.1회'
   },
   {
     period: '14:00 - 18:00',
     ctr: 68,
     traffic: '중',
     color: '#67c23a',
-    isBest: false
+    isBest: false,
+    scrollDepth: '평균 48%',
+    exposureCount: '2.8회'
   },
   {
     period: '18:00 - 22:00',
     ctr: 88,
     traffic: '매우 높음',
     color: '#f56c6c',
-    isBest: true
+    isBest: true,
+    scrollDepth: '평균 78%',
+    exposureCount: '4.2회'
   },
   {
     period: '22:00 - 02:00',
     ctr: 55,
     traffic: '낮음',
     color: '#e6a23c',
-    isBest: false
+    isBest: false,
+    scrollDepth: '평균 35%',
+    exposureCount: '1.9회'
   }
 ])
 
-// 마케팅 전략
+// 마케팅 전략 - 피처 상관관계 기반 전략
 const marketingStrategies = ref([
   {
     id: 1,
     priority: 'high',
     priorityLabel: '높은 우선순위',
-    title: '타겟 세그먼트 집중 공략',
-    description: '20-30대 여성 고객에게 맞춤형 광고 소재를 제작하고, 광고 예산의 35%를 배정합니다.',
-    impact: 28,
+    title: '콘텐츠-스크롤 조합 최적화',
+    description: '카테고리 ID 15 + 스크롤 깊이 80% 이상 조합에 맞춤형 광고를 제작하고, 광고 예산의 40%를 배정합니다.',
+    impact: 45,
     duration: '2주',
-    budget: '500만원',
-    roi: 250
+    budget: '600만원',
+    roi: 320,
+    correlation: 0.78
   },
   {
     id: 2,
     priority: 'high',
     priorityLabel: '높은 우선순위',
-    title: '프라임 타임 광고 증대',
-    description: '오후 8-10시 시간대에 광고 노출을 30% 증가시키고, 경쟁 입찰을 강화합니다.',
-    impact: 22,
+    title: '7일 노출 빈도 최적화',
+    description: '7일 노출 횟수 3-5회 세그먼트의 광고 노출을 25%로 증가시키고, 맞춤형 리타겟팅을 강화합니다.',
+    impact: 28,
     duration: '1주',
-    budget: '300만원',
-    roi: 180
+    budget: '400만원',
+    roi: 220,
+    correlation: 0.72
   },
   {
     id: 3,
     priority: 'medium',
     priorityLabel: '중간 우선순위',
-    title: '모바일 최적화 강화',
-    description: '모바일 광고 소재를 개선하고, 상단 배치 비율을 70%로 증가시킵니다.',
-    impact: 15,
+    title: '테크 카테고리 스크롤 최적화',
+    description: '카테고리 ID 8 + 스크롤 깊이 60-80% 조합에 맞춤형 광고 소재를 개발하고 배치를 최적화합니다.',
+    impact: 35,
     duration: '3주',
-    budget: '400만원',
-    roi: 140
+    budget: '500만원',
+    roi: 180,
+    correlation: 0.65
   }
 ])
 
@@ -755,8 +789,9 @@ const getPriorityType = (priority) => {
 }
 
 .segment-metrics {
-  display: flex;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
   margin-bottom: 12px;
 }
 
@@ -809,8 +844,9 @@ const getPriorityType = (priority) => {
 }
 
 .time-metrics {
-  display: flex;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 16px;
   align-items: center;
 }
 
@@ -821,7 +857,9 @@ const getPriorityType = (priority) => {
   gap: 8px;
 }
 
-.time-traffic {
+.time-traffic,
+.time-scroll,
+.time-exposure {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -834,9 +872,18 @@ const getPriorityType = (priority) => {
   color: #303133;
 }
 
-.traffic-label {
+.traffic-label,
+.scroll-label,
+.exposure-label {
   font-size: 12px;
   color: #909399;
+}
+
+.scroll-value,
+.exposure-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #303133;
 }
 
 .best-badge {
